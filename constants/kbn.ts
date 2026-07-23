@@ -39,3 +39,21 @@ export const TRANSACTION_TYPE_LABEL: Record<number, string> = {
 export const LAND_STATUS_LABEL: Record<number, string> = {
   1: '更地', 2: '建物あり',
 }
+
+// 対応区分(対応履歴)
+export const TAIOU_KBN = { SOUDAN: 1, CLAIM: 2, OTHER: 3 } as const
+export const TAIOU_KBN_LABEL: Record<number, string> = {
+  1: '契約相談', 2: 'クレーム', 3: 'その他',
+}
+
+// 対応進捗
+export const TAIOU_STATUS = { NOT_YET: 1, IN_PROGRESS: 2, DONE: 3 } as const
+export const TAIOU_STATUS_LABEL: Record<number, string> = {
+  1: '未対応', 2: '対応中', 3: '完了',
+}
+
+// 物件区分(対応履歴の対象)
+export const BUKKEN_KBN = { RENTAL: 1, SALE: 2 } as const
+export const BUKKEN_KBN_LABEL: Record<number, string> = {
+  1: '賃貸', 2: '売買',
+}

@@ -47,6 +47,8 @@ const EXTRA_COLUMNS: Record<number, { label: string; get: (d: Record<string, unk
   ],
 }
 
+
+
 // 種別の表示順
 const CATEGORY_ORDER = [1, 2, 3, 4] // マンション/アパート/戸建て/土地
 
@@ -118,8 +120,6 @@ export function SaleList({ rows }: { rows: Row[] }) {
       {shownCategories.map((cat) => {
         const items = filtered.filter((r) => r.bukken_category === cat)
         const extraCols = EXTRA_COLUMNS[cat] ?? []
-        const hasBuildingName = cat === 1 || cat === 2
-        const colCount = 3 + extraCols.length
 
         return (
           <Card key={cat}>
@@ -132,66 +132,111 @@ export function SaleList({ rows }: { rows: Row[] }) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="rounded-md border bg-background overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      {hasBuildingName ? (
-                        <TableHead>物件名</TableHead>
-                      ) : (
-                        <TableHead>所在地</TableHead>
-                      )}
-                      <TableHead>状態</TableHead>
-                      <TableHead>価格</TableHead>
-                      {extraCols.map((c) => (
-                        <TableHead key={c.label}>{c.label}</TableHead>
-                      ))}
-                      {hasBuildingName && <TableHead>所在地</TableHead>}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {items.length === 0 && (
-                      <TableRow>
-                        <TableCell colSpan={3 + extraCols.length + (hasBuildingName ? 1 : 0)}
-                          className="text-center text-muted-foreground">
-                          該当する物件がありません
-                        </TableCell>
-                      </TableRow>
-                    )}
-                    {items.map((r) => (
-                      <TableRow key={r.bukken_id}>
-                        {/* 先頭列: 建物名あり種別は物件名、なし種別は所在地。どちらもリンク */}
-                        <TableCell className="p-0">
-                          <Link href={`/bukken/sale/${r.bukken_id}`}
-                            className="block px-4 py-3 font-medium hover:underline">
-                            {hasBuildingName
-                              ? (r.bukken_name ?? '(名称未設定)')
-                              : (r.address ?? '(所在地未設定)')}
-                          </Link>
-                        </TableCell>
-                        <TableCell>
-                          {r.trade_status != null ? (
-                            <Badge variant={r.trade_status === 1 ? 'default' : 'secondary'}>
-                              {TRADE_STATUS_LABEL[r.trade_status]}
-                            </Badge>
-                          ) : '—'}
-                        </TableCell>
-                        <TableCell>
-                          {r.price != null ? `${r.price.toLocaleString()}円` : '—'}
-                        </TableCell>
-                        {extraCols.map((c) => (
-                          <TableCell key={c.label}>{c.get(r.detail)}</TableCell>
-                        ))}
-                        {hasBuildingName && <TableCell>{r.address ?? '—'}</TableCell>}
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
+              <CategoryTable category={cat} items={items} extraCols={extraCols} />
             </CardContent>
           </Card>
         )
       })}
+    </div>
+  )
+}
+
+
+function CategoryTable({
+  category,
+  items,
+  extraCols,
+}: {
+  category: number
+  items: Row[]
+  extraCols: { label: string; get: (d: Record<string, unknown>) => string }[]
+}) {
+  const hasBuildingName = category === 1 || category === 2
+
+  // ソート状態(このテーブル専用)
+  const [sortKey, setSortKey] = useState<string>(hasBuildingName ? 'bukken_name' : 'address')
+  const [asc, setAsc] = useState(true)
+
+  // ソート用の値を取り出す
+  const getSortValue = (r: Row, key: string): string | number => {
+    if (key === 'bukken_name') return r.bukken_name ?? ''
+    if (key === 'address') return r.address ?? ''
+    if (key === 'trade_status') return r.trade_status ?? 0
+    if (key === 'price') return r.price ?? 0
+    // 固有列は detail から取る(表示文字列でソート)
+    const col = extraCols.find((c) => c.label === key)
+    if (col) return col.get(r.detail)
+    return ''
+  }
+
+  const sorted = [...items].sort((a, b) => {
+    const av = getSortValue(a, sortKey)
+    const bv = getSortValue(b, sortKey)
+    if (av < bv) return asc ? -1 : 1
+    if (av > bv) return asc ? 1 : -1
+    return 0
+  })
+
+  const toggleSort = (key: string) => {
+    if (key === sortKey) setAsc(!asc)
+    else { setSortKey(key); setAsc(true) }
+  }
+  const arrow = (key: string) => (sortKey === key ? (asc ? ' ▲' : ' ▼') : '')
+  const th = (key: string, label: string) => (
+    <TableHead className="cursor-pointer select-none" onClick={() => toggleSort(key)}>
+      {label}{arrow(key)}
+    </TableHead>
+  )
+
+  return (
+    <div className="rounded-md border bg-background overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {hasBuildingName ? th('bukken_name', '物件名') : th('address', '所在地')}
+            {th('trade_status', '状態')}
+            {th('price', '価格')}
+            {extraCols.map((c) => th(c.label, c.label))}
+            {hasBuildingName && th('address', '所在地')}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {sorted.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={3 + extraCols.length + (hasBuildingName ? 1 : 0)}
+                className="text-center text-muted-foreground">
+                該当する物件がありません
+              </TableCell>
+            </TableRow>
+          )}
+          {sorted.map((r) => (
+            <TableRow key={r.bukken_id}>
+              <TableCell className="p-0">
+                <Link href={`/bukken/sale/${r.bukken_id}`}
+                  className="block px-4 py-3 font-medium hover:underline">
+                  {hasBuildingName
+                    ? (r.bukken_name ?? '(名称未設定)')
+                    : (r.address ?? '(所在地未設定)')}
+                </Link>
+              </TableCell>
+              <TableCell>
+                {r.trade_status != null ? (
+                  <Badge variant={r.trade_status === 1 ? 'default' : 'secondary'}>
+                    {TRADE_STATUS_LABEL[r.trade_status]}
+                  </Badge>
+                ) : '—'}
+              </TableCell>
+              <TableCell>
+                {r.price != null ? `${r.price.toLocaleString()}円` : '—'}
+              </TableCell>
+              {extraCols.map((c) => (
+                <TableCell key={c.label}>{c.get(r.detail)}</TableCell>
+              ))}
+              {hasBuildingName && <TableCell>{r.address ?? '—'}</TableCell>}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   )
 }
