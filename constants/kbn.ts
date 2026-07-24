@@ -1,3 +1,16 @@
+// アカウント権限
+export const ROLE = {
+  SYSTEM: 'system',   // システム管理者(組織横断。全組織のアカウント作成・ログ閲覧)
+  ADMIN: 'admin',     // 管理者(自組織の一般アカウント作成)
+  MEMBER: 'member',   // 一般
+} as const
+
+export const ROLE_LABEL: Record<string, string> = {
+  system: 'システム管理者',
+  admin: '管理者',
+  member: '一般',
+}
+
 // 物件種別
 export const BUKKEN_CATEGORY = {
   MANSION: 1, APARTMENT: 2, HOUSE: 3, LAND: 4,

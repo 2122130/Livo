@@ -5,6 +5,7 @@ import { BackLink } from '@/components/common/BackLink'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ROLE, ROLE_LABEL } from '@/constants/kbn'
 
 export default async function SettingsPage({
   searchParams,
@@ -16,6 +17,10 @@ export default async function SettingsPage({
   if (!info) return null
 
   const isAdmin = info.account.role === 'admin'
+
+  const role = info.account.role
+  const isSystem = role === ROLE.SYSTEM
+  const isAdminOrAbove = role === ROLE.ADMIN || role === ROLE.SYSTEM
 
   const row = (label: string, value: React.ReactNode) => (
     <div className="flex justify-between gap-4 border-b py-2 text-sm">
@@ -44,7 +49,11 @@ export default async function SettingsPage({
           <div className="py-0">
             {row('氏名', info.account.name)}
             {row('メールアドレス', info.email)}
-            {row('権限', isAdmin ? <Badge>管理者</Badge> : <Badge variant="secondary">一般</Badge>)}
+            {row('権限', (
+              <Badge variant={isSystem ? 'destructive' : role === ROLE.ADMIN ? 'default' : 'secondary'}>
+                {ROLE_LABEL[role]}
+              </Badge>
+            ))}
           </div>
           <form action={sendPasswordReset}>
             <Button type="submit" variant="outline" size="sm">
@@ -72,16 +81,19 @@ export default async function SettingsPage({
       </Card>
 
       {/* 管理者向け */}
-      {isAdmin && (
+      {isAdminOrAbove && (
         <Card>
           <CardHeader><CardTitle className="text-base">管理者メニュー</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             <Button asChild variant="outline" className="w-full justify-start">
               <Link href="/settings/accounts">アカウント管理</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full justify-start">
-              <Link href="/settings/logs">アクセスログ</Link>
-            </Button>
+            {/* アクセスログはシステム管理者のみ */}
+            {isSystem && (
+              <Button asChild variant="outline" className="w-full justify-start">
+                <Link href="/settings/logs">アクセスログ</Link>
+              </Button>
+            )}
           </CardContent>
         </Card>
       )}
