@@ -1,54 +1,57 @@
-import Link from 'next/link'
 import { MAIN_MENU } from '@/constants/menu'
 import { getTaiouCounts } from '@/features/queries/inquiries'
 import { SCREEN } from '@/constants/screens'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { AccessLogger } from '@/components/common/AccessLogger'
+import Link from 'next/link'
 
 export default async function MainMenuPage() {
   const counts = await getTaiouCounts()
+  const hasUrgent = counts.notYet > 0
 
   return (
-    <div className="space-y-6">
+    <main className="p-3 sm:p-6 max-w-6xl mx-auto">
       <AccessLogger screenId={SCREEN.MAIN_MENU} />
-      <h1 className="text-xl font-semibold">メニュー</h1>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 px-4 py-3 sm:px-5 sm:py-3.5 mb-3 sm:mb-4 flex flex-wrap items-center gap-3">
+        <h3 className="text-lg font-extrabold text-slate-900 border-l-4 border-emerald-600 pl-3 tracking-wide">
+          メインメニュー
+        </h3>
+        <p className="text-xs text-slate-500 font-medium hidden sm:block">行う業務を選択</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         {MAIN_MENU.map((item) => {
           const Icon = item.icon
           const isInquiry = item.screenId === SCREEN.INQUIRY_LIST
+          const urgentClass = isInquiry && hasUrgent ? 'panel-urgent' : ''
 
           return (
-            <Link key={item.screenId} href={item.href}>
-              <Card className="group cursor-pointer border-border/80 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_36px_-10px_rgb(5_150_105_/_0.25)]">
-                <CardContent className="flex items-center gap-4 p-6">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3">
-                    <Icon className="h-6 w-6 text-primary" />
+            <Link key={item.screenId} href={item.href} className={`menu-panel ${item.panelClass} ${urgentClass}`}>
+              <div className="min-w-0">
+                <span className="panel-title">{item.label}</span>
+                <span className="panel-desc">{item.description}</span>
+                {isInquiry && (counts.notYet > 0 || counts.inProgress > 0) && (
+                  <div className="mt-2 flex gap-1">
+                    {counts.notYet > 0 && (
+                      <span className="inline-flex items-center bg-rose-50 text-rose-600 border border-rose-200 text-xs font-extrabold px-2.5 py-0.5 rounded-full">
+                        未対応 {counts.notYet}
+                      </span>
+                    )}
+                    {counts.inProgress > 0 && (
+                      <span className="inline-flex items-center bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                        対応中 {counts.inProgress}
+                      </span>
+                    )}
                   </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium">{item.label}</p>
-                      {isInquiry && (counts.notYet > 0 || counts.inProgress > 0) && (
-                        <div className="flex gap-1">
-                          {counts.notYet > 0 && (
-                            <Badge variant="destructive">未対応 {counts.notYet}</Badge>
-                          )}
-                          {counts.inProgress > 0 && (
-                            <Badge>対応中 {counts.inProgress}</Badge>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+                )}
+              </div>
+              <div className="panel-icon-wrapper">
+                <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+              </div>
             </Link>
           )
         })}
       </div>
-    </div>
+    </main>
   )
 }

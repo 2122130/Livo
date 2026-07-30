@@ -1,4 +1,4 @@
-import { Building2, DoorOpen, ClipboardList, Settings } from 'lucide-react'
+import { Search, Key, MessageSquare, Settings } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { SCREEN } from './screens'
 
@@ -10,27 +10,30 @@ export type MenuItem = {
   description: string
 }
 
-export const MAIN_MENU: MenuItem[] = [
+export const MAIN_MENU = [
   {
-    screenId: SCREEN.BUKKEN_RENTAL, // 物件一覧の入口(既定タブ=賃貸)
+    screenId: SCREEN.BUKKEN_RENTAL,
     label: '物件一覧',
     href: '/bukken',
-    icon: Building2,
-    description: '賃貸・売買・太陽光の物件を管理',
+    icon: Search,          // アイコンもモックのものに変更
+    description: '賃貸・売買の物件を管理',
+    panelClass: 'panel-bukken',
   },
   {
     screenId: SCREEN.VACANCY,
     label: '空室管理',
     href: '/vacancy',
-    icon: DoorOpen,
+    icon: Key,
     description: '空室の部屋を横断して確認',
+    panelClass: 'panel-akiya',
   },
   {
     screenId: SCREEN.INQUIRY_LIST,
     label: '対応履歴',
     href: '/inquiries',
-    icon: ClipboardList,
+    icon: MessageSquare,
     description: '契約相談・クレームの進捗管理',
+    panelClass: 'panel-taiou',
   },
   {
     screenId: SCREEN.SETTINGS,
@@ -38,5 +41,6 @@ export const MAIN_MENU: MenuItem[] = [
     href: '/settings',
     icon: Settings,
     description: 'アカウント・組織の設定',
+    panelClass: 'panel-keiyaku',
   },
 ]

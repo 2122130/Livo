@@ -15,15 +15,21 @@ export default async function MainLayout({
 
   return (
     <div className="min-h-screen bg-muted/40">
-      <header className="border-b bg-background">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link href="/" className="font-semibold hover:opacity-70">
-            不動産管理システム
+      <header className="bg-emerald-700 text-white shadow-sm">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          <Link href="/" className="font-semibold tracking-wide hover:opacity-80">
+            Livo
           </Link>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{account.name}</span>
+            <span className="text-sm text-white/80">{account.name}</span>
             <form action={logout}>
-              <Button type="submit" variant="ghost" size="icon" title="ログアウト">
+              <Button
+                type="submit"
+                variant="ghost"
+                size="icon"
+                title="ログアウト"
+                className="text-white hover:bg-white/15 hover:text-white"
+              >
                 <LogOut className="h-4 w-4" />
               </Button>
             </form>
