@@ -5,6 +5,8 @@ import { ROLE } from '@/constants/kbn'
 import { BackLink } from '@/components/common/BackLink'
 import { LogTable } from './_LogTable'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function LogsPage() {
   const me = await getMyAccount()
@@ -16,6 +18,7 @@ export default async function LogsPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-4">
+      <AccessLogger screenId={SCREEN.ACCESS_LOGS} />
       <div>
         <BackLink href="/settings" label="設定へ" />
         <h1 className="text-xl font-semibold">アクセスログ</h1>

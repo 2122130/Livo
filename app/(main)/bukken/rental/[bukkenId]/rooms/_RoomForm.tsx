@@ -1,8 +1,13 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { EnterToNextForm } from '@/components/common/EnterToNextForm'
+import { SubmitButton } from '@/components/common/SubmitButton'
+import { useActionState } from 'react'
+import type { FormState } from '@/features/actions/lv111_room_new'
 
 type RoomFormValues = {
   room_number?: string
@@ -19,13 +24,21 @@ export function RoomForm({
   values,
   submitLabel,
 }: {
-  action: (formData: FormData) => void
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   values?: RoomFormValues
   submitLabel: string
 }) {
+  const [state, formAction] = useActionState(action, { error: null })
+
   return (
-    <EnterToNextForm action={action} className="space-y-4">
+    <EnterToNextForm action={formAction} className="space-y-4">
+      {state.error && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {state.error}
+        </div>
+      )}
+      
       <div className="space-y-2">
         <Label htmlFor="room_number">部屋番号 *</Label>
         <Input id="room_number" name="room_number" required
@@ -67,7 +80,7 @@ export function RoomForm({
         <Button asChild variant="outline" type="button">
           <Link href={backHref}>キャンセル</Link>
         </Button>
-        <Button type="submit">{submitLabel}</Button>
+        <SubmitButton>{submitLabel}</SubmitButton>
       </div>
     </EnterToNextForm>
   )

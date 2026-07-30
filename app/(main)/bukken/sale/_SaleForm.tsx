@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { EnterToNextForm } from '@/components/common/EnterToNextForm'
 import {
@@ -10,6 +9,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SubmitButton } from '@/components/common/SubmitButton'
+import type { FormState } from '@/features/actions/lv201_sale_new'
+import { useState, useActionState } from 'react'
 
 type SaleFormValues = {
   bukken_category?: number
@@ -49,16 +51,23 @@ function Select({ name, label, options, defaultValue, includeEmpty }: {
 export function SaleForm({
   action, backHref, values, submitLabel, categoryLocked,
 }: {
-  action: (formData: FormData) => void
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   values?: SaleFormValues
   submitLabel: string
   categoryLocked?: boolean   // 編集時は種別を変えられないようにする用
 }) {
   const [category, setCategory] = useState<number>(values?.bukken_category ?? 1)
+  const [state, formAction] = useActionState(action, { error: null })
 
   return (
-    <EnterToNextForm action={action} className="space-y-4">
+    <EnterToNextForm action={formAction} className="space-y-4">
+      {state.error && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {state.error}
+        </div>
+      )}
+      
       {/* 種別 */}
       <div className="space-y-1">
         <Label htmlFor="bukken_category">種別 *</Label>
@@ -173,7 +182,7 @@ export function SaleForm({
         <Button asChild variant="outline" type="button">
           <Link href={backHref}>キャンセル</Link>
         </Button>
-        <Button type="submit">{submitLabel}</Button>
+        <SubmitButton>{submitLabel}</SubmitButton>
       </div>
     </EnterToNextForm>
   )

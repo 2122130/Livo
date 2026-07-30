@@ -17,7 +17,12 @@ const DETAIL_TABLE: Record<number, string> = {
 const toNum = (v: FormDataEntryValue | null) =>
   v === null || v === '' ? null : Number(v)
 
-export async function createSaleBukken(formData: FormData) {
+export type FormState = { error: string | null }
+
+export async function createSaleBukken(
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
@@ -40,7 +45,7 @@ export async function createSaleBukken(formData: FormData) {
     })
     .select('bukken_id')
     .single()
-  if (error) throw error
+  if (error) return { error: '登録に失敗しました。' }
 
   const bukkenId = created.bukken_id
 
@@ -78,7 +83,7 @@ export async function createSaleBukken(formData: FormData) {
   const { error: detailError } = await supabase
     .from(DETAIL_TABLE[category])
     .insert(detailData)
-  if (detailError) throw detailError
+  if (detailError) return { error: '詳細情報の登録に失敗しました。' }
 
   revalidatePath('/bukken')
   redirect('/bukken?tab=sale')
@@ -88,8 +93,9 @@ export async function createSaleBukken(formData: FormData) {
 export async function updateSaleBukken(
   bukkenId: string,
   category: number,
+  _prevState: FormState,
   formData: FormData
-) {
+): Promise<FormState>{
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
@@ -108,7 +114,7 @@ export async function updateSaleBukken(
       update_account: account.name,
     })
     .eq('bukken_id', bukkenId)
-  if (error) throw error
+  if (error) return { error: '更新に失敗しました。' }
 
   // 2. 種別詳細テーブルを更新
   let detailData: Record<string, unknown> = { update_account: account.name }
@@ -136,7 +142,7 @@ export async function updateSaleBukken(
     .from(DETAIL_TABLE[category])
     .update(detailData)
     .eq('bukken_id', bukkenId)
-  if (detailError) throw detailError
+  if (detailError) return { error: '詳細情報の更新に失敗しました。' }
 
   revalidatePath('/bukken')
   redirect(`/bukken/sale/${bukkenId}`)

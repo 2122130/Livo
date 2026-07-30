@@ -9,6 +9,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SubmitButton } from '@/components/common/SubmitButton'
+import { useActionState } from 'react'
+import type { FormState } from '@/features/actions/lv801_inquiry_new'
 
 type Option = { bukken_id: string; label: string }
 type Room = { room_id: string; bukken_id: string; room_number: string }
@@ -33,7 +36,7 @@ type Values = {
 export function InquiryForm({
   action, backHref, submitLabel, options, values, defaultAccountId,
 }: {
-  action: (formData: FormData) => void
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   submitLabel: string
   options: { rentals: Option[]; sales: Option[]; rooms: Room[]; accounts: Account[] }
@@ -42,6 +45,7 @@ export function InquiryForm({
 }) {
   const [bukkenKbn, setBukkenKbn] = useState<number>(values?.bukken_kbn ?? 1)
   const [bukkenId, setBukkenId] = useState<string>(values?.bukken_id ?? '')
+  const [state, formAction] = useActionState(action, { error: null }) 
 
   // 物件区分に応じた物件リスト
   const bukkenOptions = bukkenKbn === 1 ? options.rentals : options.sales
@@ -51,7 +55,14 @@ export function InquiryForm({
     : []
 
   return (
-    <EnterToNextForm action={action} className="space-y-5">
+    <EnterToNextForm action={formAction} className="space-y-5">
+      {/* エラーメッセージ */}
+      {state.error && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {state.error}
+        </div>
+      )}
+
       {/* 物件区分(ラジオボタン) */}
       <div className="space-y-2">
         <Label>物件区分 *</Label>
@@ -196,7 +207,7 @@ export function InquiryForm({
         <Button asChild variant="outline" type="button">
           <Link href={backHref}>キャンセル</Link>
         </Button>
-        <Button type="submit">{submitLabel}</Button>
+        <SubmitButton>{submitLabel}</SubmitButton>
       </div>
     </EnterToNextForm>
   )

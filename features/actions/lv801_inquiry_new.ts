@@ -6,9 +6,20 @@ import { createClient } from '@/lib/supabase/server'
 import { getMyAccount } from '@/features/auth/get-my-account'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-export async function createTaiouRireki(formData: FormData) {
+export type FormState = { error: string | null }
+
+export async function createTaiouRireki(
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const account = await getMyAccount()
   if (!account) redirect('/login')
+
+  const bukkenId = formData.get('bukken_id') as string
+  if (!bukkenId) return { error: '物件を選択してください' }
+
+  const content = (formData.get('content') as string)?.trim()
+  if (!content) return { error: '対応内容を入力してください' }
 
   const supabase = await createClient()
 
@@ -32,16 +43,26 @@ export async function createTaiouRireki(formData: FormData) {
     bikou: (formData.get('bikou') as string) || null,
     create_account: account.name,
   })
-  if (error) throw error
+  if (error) return { error: '登録に失敗しました。' }
 
   revalidatePath('/inquiries')
   redirect('/inquiries')
 }
 
 // 対応履歴の更新
-export async function updateTaiouRireki(taiouId: string, formData: FormData) {
+export async function updateTaiouRireki(
+  taiouId: string,
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const account = await getMyAccount()
   if (!account) redirect('/login')
+
+  const bukkenId = formData.get('bukken_id') as string
+  if (!bukkenId) return { error: '物件を選択してください' }
+
+  const content = (formData.get('content') as string)?.trim()
+  if (!content) return { error: '対応内容を入力してください' }
 
   const supabase = await createClient()
   const roomId = formData.get('room_id') as string
@@ -64,7 +85,7 @@ export async function updateTaiouRireki(taiouId: string, formData: FormData) {
       update_account: account.name,
     })
     .eq('taiou_id', taiouId)
-  if (error) throw error
+  if (error) return { error: '更新に失敗しました。' }
 
   revalidatePath('/inquiries')
   redirect(`/inquiries`)

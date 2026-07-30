@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { SubmitButton } from '@/components/common/SubmitButton'
 
 export default async function LoginPage({
   searchParams,
@@ -33,9 +34,7 @@ export default async function LoginPage({
                 メールアドレスまたはパスワードが正しくありません
               </p>
             )}
-            <Button type="submit" className="w-full">
-              ログイン
-            </Button>
+            <SubmitButton className="w-full">ログイン</SubmitButton>
           </form>
         </CardContent>
       </Card>

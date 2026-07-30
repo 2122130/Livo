@@ -6,20 +6,27 @@ import { createClient } from '@/lib/supabase/server'
 import { getMyAccount } from '@/features/auth/get-my-account'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-export async function createRoom(bukkenId: string, formData: FormData) {
+export type FormState = { error: string | null }
+
+export async function createRoom(
+  bukkenId: string,
+  _prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
-  const supabase = await createClient()
+  const roomNumber = (formData.get('room_number') as string)?.trim()
+  if (!roomNumber) return { error: '部屋番号を入力してください' }
 
-  // 数値項目は空文字ならnullにする
   const toNum = (v: FormDataEntryValue | null) =>
     v === null || v === '' ? null : Number(v)
 
+  const supabase = await createClient()
   const { error } = await supabase.from('m210_rent_room').insert({
-    org_id: account.org_id,        // 組織はサーバー側で決定
-    bukken_id: bukkenId,            // URLから受け取った物件に紐づける
-    room_number: formData.get('room_number') as string,
+    org_id: account.org_id,
+    bukken_id: bukkenId,
+    room_number: roomNumber,
     layout: (formData.get('layout') as string) || null,
     rent: toNum(formData.get('rent')),
     other_fee: toNum(formData.get('other_fee')),
@@ -27,7 +34,7 @@ export async function createRoom(bukkenId: string, formData: FormData) {
     guarantee_company: (formData.get('guarantee_company') as string) || null,
     create_account: account.name,
   })
-  if (error) throw error
+  if (error) return { error: '登録に失敗しました。時間をおいて再度お試しください。' }
 
   revalidatePath(`/bukken/rental/${bukkenId}/rooms`)
   redirect(`/bukken/rental/${bukkenId}/rooms`)
@@ -35,10 +42,11 @@ export async function createRoom(bukkenId: string, formData: FormData) {
 
 // 部屋情報の更新(編集画面から。roomId指定で既存部屋を更新)
 export async function updateRoom(
-  roomId: string,
-  bukkenId: string,
-  formData: FormData
-) {
+    roomId: string,
+    bukkenId: string,
+    _prevState: FormState,
+    formData: FormData
+): Promise<FormState>  {
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
@@ -58,7 +66,7 @@ export async function updateRoom(
       update_account: account.name,
     })
     .eq('room_id', roomId)
-  if (error) throw error
+  if (error) return { error: '更新に失敗しました。' } 
 
   revalidatePath(`/bukken/rental/${bukkenId}/rooms`)
   redirect(`/bukken/rental/${bukkenId}/rooms/${roomId}`)  // 編集後は部屋詳細へ

@@ -1,9 +1,14 @@
+'use client'
+
 import Link from 'next/link'
 import { EnterToNextForm } from '@/components/common/EnterToNextForm'
 import { BUKKEN_CATEGORY_LABEL, MANAGEMENT_TYPE_LABEL } from '@/constants/kbn'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SubmitButton } from '@/components/common/SubmitButton'
+import { useActionState } from 'react'
+import type { FormState } from '@/features/actions/lv101_rental_new'
 
 type BukkenFormValues = {
   bukken_name?: string
@@ -18,13 +23,22 @@ export function BukkenForm({
   values,
   submitLabel,
 }: {
-  action: (formData: FormData) => void
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   values?: BukkenFormValues
   submitLabel: string
 }) {
+  const [state, formAction] = useActionState(action, { error: null })
+
   return (
-    <EnterToNextForm action={action} className="space-y-4">
+    <EnterToNextForm action={formAction} className="space-y-4">
+      {/* エラーメッセージ */}
+      {state.error && (
+        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {state.error}
+        </div>
+      )}
+      
       <div className="space-y-2">
         <Label htmlFor="bukken_name">物件名 *</Label>
         <Input id="bukken_name" name="bukken_name" required defaultValue={values?.bukken_name ?? ''} />
@@ -61,7 +75,7 @@ export function BukkenForm({
         <Button asChild variant="outline" type="button">
           <Link href={backHref}>キャンセル</Link>
         </Button>
-        <Button type="submit">{submitLabel}</Button>
+        <SubmitButton>{submitLabel}</SubmitButton>
       </div>
     </EnterToNextForm>
   )

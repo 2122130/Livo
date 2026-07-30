@@ -7,6 +7,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 // 詳細項目の表示定義(種別ごと)
 function DetailRows({ category, detail }: { category: number; detail: Record<string, unknown> }) {
@@ -57,6 +59,7 @@ export default async function SaleDetailPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
+      <AccessLogger screenId={SCREEN.SALE_DETAIL} />
       <div className="flex items-center justify-between">
         <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
           <Link href="/bukken?tab=sale">← 売買一覧へ</Link>

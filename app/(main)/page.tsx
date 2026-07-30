@@ -20,9 +20,9 @@ export default async function MainMenuPage() {
 
           return (
             <Link key={item.screenId} href={item.href}>
-              <Card className="transition-colors hover:bg-accent hover:border-primary/40">
+              <Card className="group cursor-pointer border-border/80 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_18px_36px_-10px_rgb(5_150_105_/_0.25)]">
                 <CardContent className="flex items-center gap-4 p-6">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-transform duration-200 group-hover:scale-105 group-hover:-rotate-3">
                     <Icon className="h-6 w-6 text-primary" />
                   </div>
                   <div className="min-w-0">

@@ -12,6 +12,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function AccountsPage({
   searchParams,
@@ -34,6 +36,7 @@ export default async function AccountsPage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
+      <AccessLogger screenId={SCREEN.ACCOUNTS} />
       <div>
         <BackLink href="/settings" label="設定へ" />
         <h1 className="text-xl font-semibold">アカウント管理</h1>
