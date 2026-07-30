@@ -7,6 +7,7 @@ import { LogTable } from './_LogTable'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function LogsPage() {
   const me = await getMyAccount()
@@ -20,8 +21,7 @@ export default async function LogsPage() {
     <div className="mx-auto max-w-5xl space-y-4">
       <AccessLogger screenId={SCREEN.ACCESS_LOGS} />
       <div>
-        <BackLink href="/settings" label="設定へ" />
-        <h1 className="text-xl font-semibold">アクセスログ</h1>
+        <PageHeader title="アクセスログ" backHref="/settings" backLabel="設定へ" />
       </div>
 
       <Card>

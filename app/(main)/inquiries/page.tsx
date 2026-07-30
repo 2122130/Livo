@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function InquiriesPage({
   searchParams,
@@ -23,17 +24,22 @@ export default async function InquiriesPage({
     <div className="space-y-4">
       <AccessLogger screenId={SCREEN.INQUIRY_LIST} />
       <div>
-        <BackLink href="/" label="メインメニューへ" />
-        <h1 className="text-xl font-semibold">対応履歴</h1>
+        <PageHeader title="対応履歴" backHref="/" backLabel="メインメニューへ" />
       </div>
 
       <Tabs value={activeTab}>
-        <TabsList>
+        <TabsList className="bg-slate-100 p-1">
           <TabsTrigger value="rental" asChild>
-            <Link href="/inquiries?tab=rental">賃貸</Link>
+            <Link href="/inquiries?tab=rental"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
+              賃貸
+            </Link>
           </TabsTrigger>
           <TabsTrigger value="sale" asChild>
-            <Link href="/inquiries?tab=sale">売買</Link>
+            <Link href="/inquiries?tab=sale"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
+              売買
+            </Link>
           </TabsTrigger>
         </TabsList>
 

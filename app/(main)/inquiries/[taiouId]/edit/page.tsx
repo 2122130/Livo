@@ -6,6 +6,7 @@ import { BackLink } from '@/components/common/BackLink'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function InquiryEditPage({
   params,
@@ -22,8 +23,7 @@ export default async function InquiryEditPage({
     <div className="mx-auto max-w-2xl space-y-4">
       <AccessLogger screenId={SCREEN.INQUIRY_EDIT} />
       <div>
-        <BackLink href="/inquiries" label="対応履歴一覧へ" />
-        <h1 className="text-xl font-semibold">対応履歴の編集</h1>
+        <PageHeader title="対応履歴の編集" backHref="/inquiries" backLabel="一覧へ戻る" />
       </div>
       <Card>
         <CardHeader><CardTitle className="text-base">対応内容</CardTitle></CardHeader>

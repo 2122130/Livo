@@ -38,7 +38,7 @@ export function TenancyTable({
   }
 
   return (
-    <div className="rounded-md border bg-background overflow-x-auto">
+    <div className="rounded-md border bg-white overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>

@@ -52,7 +52,7 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
   }
 
   return (
-    <div className="rounded-md border bg-background">
+    <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
@@ -63,7 +63,7 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
             {th('other_fee', 'その他費用')}
             {th('parking_number', 'P番号')}
             {th('guarantee_company', '保証会社')}
-            <TableHead className="w-16 text-right">編集</TableHead>
+            <TableHead className="w-16 text-center">編集</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -87,7 +87,7 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
               <TableCell>{r.other_fee != null ? `${r.other_fee.toLocaleString()}円` : '—'}</TableCell>
               <TableCell>{r.parking_number ?? '—'}</TableCell>
               <TableCell>{r.guarantee_company ?? '—'}</TableCell>
-              <TableCell className="text-right">
+              <TableCell className="text-center">
                 <Button asChild variant="outline" size="sm">
                   <Link href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}/edit`}>編集</Link>
                 </Button>

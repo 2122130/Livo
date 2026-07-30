@@ -95,7 +95,7 @@ export function VacancyTable({ rows }: { rows: Row[] }) {
       <p className="text-sm text-muted-foreground">{sorted.length}件</p>
 
       {/* テーブル */}
-      <div className="rounded-md border bg-background">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

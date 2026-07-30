@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 // 詳細項目の表示定義(種別ごと)
 function DetailRows({ category, detail }: { category: number; detail: Record<string, unknown> }) {
@@ -60,17 +61,11 @@ export default async function SaleDetailPage({
   return (
     <div className="mx-auto max-w-2xl space-y-4">
       <AccessLogger screenId={SCREEN.SALE_DETAIL} />
-      <div className="flex items-center justify-between">
-        <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
-          <Link href="/bukken?tab=sale">← 売買一覧へ</Link>
-        </Button>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/bukken/sale/${bukkenId}/edit`}>編集</Link>
-        </Button>
+      <div>
+        <PageHeader title={b.bukken_name ?? '(名称未設定)'} backHref="/bukken?tab=sale" backLabel="売買一覧へ" />
       </div>
 
       <div className="flex items-center gap-3">
-        <h1 className="text-xl font-semibold">{b.bukken_name ?? '(名称未設定)'}</h1>
         <Badge variant="outline">{BUKKEN_CATEGORY_LABEL[b.bukken_category]}</Badge>
         {b.trade_status != null && (
           <Badge variant={b.trade_status === 1 ? 'default' : 'secondary'}>

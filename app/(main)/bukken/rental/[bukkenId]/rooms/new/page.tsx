@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function RoomNewPage({
   params,
@@ -18,13 +19,9 @@ export default async function RoomNewPage({
   return (
     <div className="mx-auto max-w-xl space-y-4">
       <AccessLogger screenId={SCREEN.ROOM_NEW} />
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">部屋の登録</h1>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/bukken/rental/${bukkenId}/rooms`}>一覧へ戻る</Link>
-        </Button>
+      <div>
+        <PageHeader title="部屋の登録" subtitle={`物件: ${bukken.bukken_name}`} backHref={`/bukken/rental/${bukkenId}/rooms`} backLabel="一覧へ戻る" />
       </div>
-      <p className="text-sm text-muted-foreground">物件: {bukken.bukken_name}</p>
       <Card>
         <CardHeader><CardTitle className="text-base">部屋情報</CardTitle></CardHeader>
         <CardContent>

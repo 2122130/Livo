@@ -97,7 +97,7 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
               <Label>進捗</Label>
               <select value={status}
                 onChange={(e) => setStatus(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm">
                 <option value="all">すべて</option>
                 {Object.entries(TAIOU_STATUS_LABEL).map(([v, l]) => (
                   <option key={v} value={v}>{l}</option>
@@ -108,7 +108,7 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
               <Label>対応区分</Label>
               <select value={taiouKbn}
                 onChange={(e) => setTaiouKbn(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm">
                 <option value="all">すべて</option>
                 {Object.entries(TAIOU_KBN_LABEL).map(([v, l]) => (
                   <option key={v} value={v}>{l}</option>
@@ -131,7 +131,7 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
 
       <p className="text-sm text-muted-foreground">{sorted.length}件</p>
 
-      <div className="rounded-md border bg-background overflow-x-auto">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

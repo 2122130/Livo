@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/table'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function AccountsPage({
   searchParams,
@@ -38,8 +39,7 @@ export default async function AccountsPage({
     <div className="mx-auto max-w-3xl space-y-4">
       <AccessLogger screenId={SCREEN.ACCOUNTS} />
       <div>
-        <BackLink href="/settings" label="設定へ" />
-        <h1 className="text-xl font-semibold">アカウント管理</h1>
+        <PageHeader title="アカウント管理" backHref="/settings" backLabel="設定へ" />
       </div>
 
       {created === '1' && (
@@ -58,7 +58,7 @@ export default async function AccountsPage({
               <div className="space-y-1">
                 <Label htmlFor="org_id">組織 *</Label>
                 <select id="org_id" name="org_id" required
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+                  className="w-full rounded-md border bg-white px-3 py-2 text-sm">
                   <option value="">選択してください</option>
                   {data.orgs.map((o) => (
                     <option key={o.org_id} value={o.org_id}>{o.org_name}</option>
@@ -83,7 +83,7 @@ export default async function AccountsPage({
               <div className="space-y-1">
                 <Label htmlFor="role">権限 *</Label>
                 <select id="role" name="role" required defaultValue={ROLE.MEMBER}
-                  className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+                  className="w-full rounded-md border bg-white px-3 py-2 text-sm">
                   <option value={ROLE.ADMIN}>{ROLE_LABEL.admin}</option>
                   <option value={ROLE.MEMBER}>{ROLE_LABEL.member}</option>
                 </select>
@@ -112,7 +112,7 @@ export default async function AccountsPage({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="rounded-md border bg-background">
+          <div className="rounded-md border bg-white">
             <Table>
               <TableHeader>
                 <TableRow>

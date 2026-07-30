@@ -12,6 +12,7 @@ import { getMyAccount } from '@/features/auth/get-my-account'
 import { ROLE } from '@/constants/kbn'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function BukkenPage({
   searchParams,
@@ -50,24 +51,28 @@ export default async function BukkenPage({
   return (
     <div className="space-y-4">
       <AccessLogger screenId={activeTab === 'sale' ? SCREEN.BUKKEN_SALE : SCREEN.BUKKEN_RENTAL} />
-      <BackLink href="/" label="メインメニューへ" />
-      <h1 className="text-xl font-semibold">物件一覧</h1>
 
+      <PageHeader
+        title="物件一覧"
+        backHref="/"
+        backLabel="メインメニューへ"
+      />
       <Tabs value={activeTab}>
-        <TabsList>
+        <TabsList className="bg-slate-100 p-1">
           {hasRental && (
             <TabsTrigger value="rental" asChild>
-              <Link href="/bukken?tab=rental">賃貸</Link>
+              <Link href="/bukken?tab=rental"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
+                賃貸
+              </Link>
             </TabsTrigger>
           )}
           {hasSale && (
             <TabsTrigger value="sale" asChild>
-              <Link href="/bukken?tab=sale">売買</Link>
-            </TabsTrigger>
-          )}
-          {hasSolar && (
-            <TabsTrigger value="solar" asChild>
-              <Link href="/bukken?tab=solar">太陽光</Link>
+              <Link href="/bukken?tab=sale"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
+                売買
+              </Link>
             </TabsTrigger>
           )}
         </TabsList>

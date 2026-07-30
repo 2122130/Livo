@@ -38,7 +38,7 @@ function Select({ name, label, options, defaultValue, includeEmpty }: {
     <div className="space-y-1">
       <Label htmlFor={name}>{label}</Label>
       <select id={name} name={name} defaultValue={defaultValue ?? ''}
-        className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+        className="w-full rounded-md border bg-white px-3 py-2 text-sm">
         {includeEmpty && <option value="">選択してください</option>}
         {Object.entries(options).map(([v, l]) => (
           <option key={v} value={v}>{l}</option>
@@ -77,7 +77,7 @@ export function SaleForm({
           value={category}
           onChange={(e) => setCategory(Number(e.target.value))}
           disabled={categoryLocked}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm disabled:opacity-60"
+          className="w-full rounded-md border bg-white px-3 py-2 text-sm disabled:opacity-60"
         >
           {Object.entries(BUKKEN_CATEGORY_LABEL).map(([v, l]) => (
             <option key={v} value={v}>{l}</option>

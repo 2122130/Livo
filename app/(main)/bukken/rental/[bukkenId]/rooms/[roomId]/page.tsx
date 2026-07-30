@@ -23,6 +23,7 @@ import { TenancyTable } from './_TenancyTable'
 import { BackLink } from '@/components/common/BackLink'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
+import { PageHeader } from '@/components/common/PageHeader'
 
 export default async function RoomDetailPage({
   params,
@@ -58,13 +59,14 @@ export default async function RoomDetailPage({
       <AccessLogger screenId={SCREEN.ROOM_DETAIL} />
       {/* ヘッダー */}
       <div>
-        <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
+        <PageHeader title={`${room.bukken_name} - ${room.room_number}`} backHref={`/bukken/rental/${bukkenId}/rooms`} backLabel="部屋一覧へ" />
+        {/* <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
           <BackLink href={backLink.href} label={backLink.label} />
-        </Button>
+        </Button> */}
         <div className="flex items-center gap-3">
-          <h1 className="text-xl font-semibold">
+          {/* <h1 className="text-xl font-semibold">
             {room.bukken_name ?? ''} - {room.room_number}
-          </h1>
+          </h1> */}
           <Badge variant={status === 2 ? 'default' : status === 3 ? 'outline' : 'secondary'}>
             {ROOM_STATUS_LABEL[status]}
           </Badge>

@@ -48,7 +48,7 @@ export function BukkenForm({
         <Label htmlFor="bukken_category">種別 *</Label>
         <select id="bukken_category" name="bukken_category" required
           defaultValue={values?.bukken_category ?? 1}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+          className="w-full rounded-md border bg-white px-3 py-2 text-sm">
           {Object.entries(BUKKEN_CATEGORY_LABEL).map(([v, l]) => (
             <option key={v} value={v}>{l}</option>
           ))}
@@ -59,7 +59,7 @@ export function BukkenForm({
         <Label htmlFor="management_type">管理区分 *</Label>
         <select id="management_type" name="management_type" required
           defaultValue={values?.management_type ?? 1}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+          className="w-full rounded-md border bg-white px-3 py-2 text-sm">
           {Object.entries(MANAGEMENT_TYPE_LABEL).map(([v, l]) => (
             <option key={v} value={v}>{l}</option>
           ))}

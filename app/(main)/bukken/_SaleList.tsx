@@ -79,7 +79,7 @@ export function SaleList({ rows }: { rows: Row[] }) {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm"
               >
                 <option value="all">すべて</option>
                 {CATEGORY_ORDER.map((c) => (
@@ -92,7 +92,7 @@ export function SaleList({ rows }: { rows: Row[] }) {
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm"
               >
                 <option value="all">すべて</option>
                 <option value={1}>募集中</option>
@@ -189,7 +189,7 @@ function CategoryTable({
   )
 
   return (
-    <div className="rounded-md border bg-background overflow-x-auto">
+    <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>

@@ -38,7 +38,11 @@ export async function createRentalBukken(
 }
 
 // 物件の更新(編集画面から)
-export async function updateRentalBukken(bukkenId: string, formData: FormData) {
+export async function updateRentalBukken(
+  bukkenId: string,
+  _prevState: FormState,       // ★
+  formData: FormData
+): Promise<FormState> {
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
@@ -53,7 +57,7 @@ export async function updateRentalBukken(bukkenId: string, formData: FormData) {
       update_account: account.name,
     })
     .eq('bukken_id', bukkenId)
-  if (error) throw error
+  if (error) return { error: '更新に失敗しました。' }
 
   revalidatePath('/bukken')
   redirect('/bukken?tab=rental')

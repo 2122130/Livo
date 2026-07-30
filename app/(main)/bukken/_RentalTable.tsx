@@ -63,7 +63,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
   const arrow = (key: SortKey) => (sortKey === key ? (asc ? ' ▲' : ' ▼') : '')
 
   return (
-    <div className="rounded-md border bg-background">
+    <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
       {/* 検索条件 */}
       <Card>
         <CardContent className="space-y-3 pt-6">
@@ -73,7 +73,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm"
               >
                 <option value="all">すべて</option>
                 {Object.entries(BUKKEN_CATEGORY_LABEL).map(([v, l]) => (
@@ -86,7 +86,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
               <select
                 value={management}
                 onChange={(e) => setManagement(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm"
               >
                 <option value="all">すべて</option>
                 {Object.entries(MANAGEMENT_TYPE_LABEL).map(([v, l]) => (
@@ -119,7 +119,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
             <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('management_type')}>管理区分{arrow('management_type')}</TableHead>
             <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('vacancy')}>空室数/総戸数{arrow('vacancy')}</TableHead>
             <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('address')}>所在地{arrow('address')}</TableHead>
-            <TableHead className="w-16 text-right">編集</TableHead>
+            <TableHead className="w-20 text-center">編集</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -141,7 +141,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
               <TableCell>{MANAGEMENT_TYPE_LABEL[b.management_type]}</TableCell>
               <TableCell>{b.vacant_units}/{b.total_units}</TableCell>
               <TableCell>{b.address ?? '—'}</TableCell>
-              <TableCell className="text-right">
+              <TableCell className="text-center">
                 <Button asChild variant="outline" size="sm">
                   <Link href={`/bukken/rental/${b.bukken_id}/edit`}>編集</Link>
                 </Button>

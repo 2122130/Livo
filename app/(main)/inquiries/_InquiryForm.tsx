@@ -93,7 +93,7 @@ export function InquiryForm({
         <div className="space-y-1">
           <Label htmlFor="status_kbn">進捗 *</Label>
           <select id="status_kbn" name="status_kbn" required defaultValue={values?.status_kbn ?? 1}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+            className="w-full rounded-md border bg-white px-3 py-2 text-sm">
             {Object.entries(TAIOU_STATUS_LABEL).map(([v, l]) => (
               <option key={v} value={v}>{l}</option>
             ))}
@@ -107,7 +107,7 @@ export function InquiryForm({
           <Label htmlFor="bukken_id">物件名 *</Label>
           <select id="bukken_id" name="bukken_id" required value={bukkenId}
             onChange={(e) => setBukkenId(e.target.value)}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+            className="w-full rounded-md border bg-white px-3 py-2 text-sm">
             <option value="">選択してください</option>
             {bukkenOptions.map((b) => (
               <option key={b.bukken_id} value={b.bukken_id}>{b.label}</option>
@@ -119,7 +119,7 @@ export function InquiryForm({
           {bukkenKbn === 1 ? (
             <>
               <select id="room_id" name="room_id" defaultValue={values?.room_id ?? ''}
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+                className="w-full rounded-md border bg-white px-3 py-2 text-sm">
                 <option value="">指定しない</option>
                 {roomOptions.map((r) => (
                   <option key={r.room_id} value={r.room_id}>{r.room_number}</option>
@@ -146,7 +146,7 @@ export function InquiryForm({
         <div className="space-y-1">
           <Label htmlFor="taiou_kbn">対応区分 *</Label>
           <select id="taiou_kbn" name="taiou_kbn" required defaultValue={values?.taiou_kbn ?? 1}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+            className="w-full rounded-md border bg-white px-3 py-2 text-sm">
             {Object.entries(TAIOU_KBN_LABEL).map(([v, l]) => (
               <option key={v} value={v}>{l}</option>
             ))}
@@ -166,7 +166,7 @@ export function InquiryForm({
         <Label htmlFor="content">対応内容 *</Label>
         <textarea id="content" name="content" required rows={4}
           defaultValue={values?.content ?? ''}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
+          className="w-full rounded-md border bg-white px-3 py-2 text-sm" />
       </div>
 
       {/* 受付者・担当者 */}
@@ -175,7 +175,7 @@ export function InquiryForm({
           <Label htmlFor="uketsuke_account_id">受付者 *</Label>
           <select id="uketsuke_account_id" name="uketsuke_account_id" required
             defaultValue={values?.uketsuke_account_id ?? defaultAccountId ?? ''}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+            className="w-full rounded-md border bg-white px-3 py-2 text-sm">
             <option value="">選択してください</option>
             {options.accounts.map((a) => (
               <option key={a.account_id} value={a.account_id}>{a.name}</option>
@@ -186,7 +186,7 @@ export function InquiryForm({
           <Label htmlFor="tantou_account_id">担当者</Label>
           <select id="tantou_account_id" name="tantou_account_id"
             defaultValue={values?.tantou_account_id ?? ''}
-            className="w-full rounded-md border bg-background px-3 py-2 text-sm">
+            className="w-full rounded-md border bg-white px-3 py-2 text-sm">
             <option value="">未アサイン</option>
             {options.accounts.map((a) => (
               <option key={a.account_id} value={a.account_id}>{a.name}</option>
@@ -200,7 +200,7 @@ export function InquiryForm({
         <Label htmlFor="bikou">備考</Label>
         <textarea id="bikou" name="bikou" rows={2}
           defaultValue={values?.bikou ?? ''}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
+          className="w-full rounded-md border bg-white px-3 py-2 text-sm" />
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
