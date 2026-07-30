@@ -4,6 +4,8 @@ import { BackLink } from '@/components/common/BackLink'
 import { InquiryTable } from './_InquiryTable'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function InquiriesPage({
   searchParams,
@@ -19,6 +21,7 @@ export default async function InquiriesPage({
 
   return (
     <div className="space-y-4">
+      <AccessLogger screenId={SCREEN.INQUIRY_LIST} />
       <div>
         <BackLink href="/" label="メインメニューへ" />
         <h1 className="text-xl font-semibold">対応履歴</h1>

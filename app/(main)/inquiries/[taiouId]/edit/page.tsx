@@ -4,6 +4,8 @@ import { InquiryForm } from '../../_InquiryForm'
 import { DeleteButton } from './_DeleteButton'
 import { BackLink } from '@/components/common/BackLink'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function InquiryEditPage({
   params,
@@ -18,6 +20,7 @@ export default async function InquiryEditPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
+      <AccessLogger screenId={SCREEN.INQUIRY_EDIT} />
       <div>
         <BackLink href="/inquiries" label="対応履歴一覧へ" />
         <h1 className="text-xl font-semibold">対応履歴の編集</h1>

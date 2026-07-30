@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ROLE, ROLE_LABEL } from '@/constants/kbn'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function SettingsPage({
   searchParams,
@@ -31,6 +33,7 @@ export default async function SettingsPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
+      <AccessLogger screenId={SCREEN.SETTINGS} />
       <div>
         <BackLink href="/" label="メインメニューへ" />
         <h1 className="text-xl font-semibold">設定</h1>

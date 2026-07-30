@@ -6,12 +6,15 @@ export const SCREEN = {
   RENTAL_NEW:      'lv101',   // 賃貸物件登録
   ROOM_LIST:       'lv110',   // 賃貸部屋一覧
   ROOM_NEW:        'lv111',   // 賃貸部屋登録
+  ROOM_EDIT:       'lv111',   // 賃貸部屋編集
   BUKKEN_SALE:     'lv200',   // 物件一覧 - 売買タブ
   SALE_NEW:        'lv201',   // 売買物件登録
+  SALE_EDIT:       'lv201',   // 売買物件編集
   BUKKEN_SOLAR:    'lv300',   // 物件一覧 - 太陽光タブ(要件確定後)
   VACANCY:         'lv700',   // 空室管理
   INQUIRY_LIST:    'lv800',   // 対応履歴一覧
   INQUIRY_NEW:     'lv801',   // 対応履歴登録
+  INQUIRY_EDIT:    'lv801',   // 対応履歴編集
   SETTINGS:        'lv900',   // 設定
 } as const
 

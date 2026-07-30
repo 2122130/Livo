@@ -5,6 +5,8 @@ import { SaleForm } from '../../_SaleForm'
 import { DeleteButton } from './_DeleteButton'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function SaleEditPage({
   params,
@@ -28,6 +30,7 @@ export default async function SaleEditPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
+      <AccessLogger screenId={SCREEN.SALE_EDIT} />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">売買物件の編集</h1>
         <Button asChild variant="outline" size="sm">

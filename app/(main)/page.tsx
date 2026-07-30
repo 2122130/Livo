@@ -4,12 +4,14 @@ import { getTaiouCounts } from '@/features/queries/inquiries'
 import { SCREEN } from '@/constants/screens'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { AccessLogger } from '@/components/common/AccessLogger'
 
 export default async function MainMenuPage() {
   const counts = await getTaiouCounts()
 
   return (
     <div className="space-y-6">
+      <AccessLogger screenId={SCREEN.MAIN_MENU} />
       <h1 className="text-xl font-semibold">メニュー</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {MAIN_MENU.map((item) => {

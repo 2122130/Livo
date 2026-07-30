@@ -5,6 +5,8 @@ import { createTaiouRireki } from '@/features/actions/lv801_inquiry_new'
 import { InquiryForm } from '../_InquiryForm'
 import { BackLink } from '@/components/common/BackLink'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function InquiryNewPage({
   searchParams,
@@ -19,6 +21,7 @@ export default async function InquiryNewPage({
 
   return (
     <div className="mx-auto max-w-2xl space-y-4">
+      <AccessLogger screenId={SCREEN.INQUIRY_NEW} />
       <div>
         <BackLink href={`/inquiries?tab=${kbn === '2' ? 'sale' : 'rental'}`} label="対応履歴一覧へ" />
         <h1 className="text-xl font-semibold">対応履歴の登録</h1>

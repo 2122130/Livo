@@ -21,6 +21,8 @@ import { EnterToNextForm } from '@/components/common/EnterToNextForm'
 import { updateTenancyBikou } from '@/features/actions/lv110_room_detail'
 import { TenancyTable } from './_TenancyTable'
 import { BackLink } from '@/components/common/BackLink'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function RoomDetailPage({
   params,
@@ -53,6 +55,7 @@ export default async function RoomDetailPage({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
+      <AccessLogger screenId={SCREEN.BUKKEN_RENTAL} />
       {/* ヘッダー */}
       <div>
         <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">

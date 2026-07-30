@@ -3,6 +3,8 @@ import { getRentalBukken, getRoomsByBukken } from '@/features/queries/rental'
 import { RoomTable } from './_RoomTable'
 import { Button } from '@/components/ui/button'
 import { BackLink } from '@/components/common/BackLink'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function RoomsPage({
   params,
@@ -17,6 +19,7 @@ export default async function RoomsPage({
 
   return (
     <div className="space-y-4">
+      <AccessLogger screenId={SCREEN.ROOM_LIST} />
       <div className="flex items-center justify-between">
         <div>
           <BackLink href="/bukken?tab=rental" label="物件一覧へ" />

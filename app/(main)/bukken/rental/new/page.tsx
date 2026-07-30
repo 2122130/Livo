@@ -3,10 +3,13 @@ import { createRentalBukken } from '@/features/actions/lv101_rental_new'
 import { BukkenForm } from '../_BukkenForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default function RentalNewPage() {
   return (
     <div className="mx-auto max-w-xl space-y-4">
+      <AccessLogger screenId={SCREEN.RENTAL_NEW} />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">賃貸物件の登録</h1>
         <Button asChild variant="outline" size="sm">

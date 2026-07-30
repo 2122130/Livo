@@ -183,7 +183,7 @@ function CategoryTable({
   }
   const arrow = (key: string) => (sortKey === key ? (asc ? ' ▲' : ' ▼') : '')
   const th = (key: string, label: string) => (
-    <TableHead className="cursor-pointer select-none" onClick={() => toggleSort(key)}>
+    <TableHead key={key} className="cursor-pointer select-none" onClick={() => toggleSort(key)}>
       {label}{arrow(key)}
     </TableHead>
   )
@@ -197,7 +197,15 @@ function CategoryTable({
             {th('trade_status', '状態')}
             {th('price', '価格')}
             {extraCols.map((c) => th(c.label, c.label))}
-            {hasBuildingName && th('address', '所在地')}
+            {hasBuildingName && (
+              <TableHead
+                key="address-last"
+                className="cursor-pointer select-none"
+                onClick={() => toggleSort('address')}
+              >
+                所在地{arrow('address')}
+              </TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>

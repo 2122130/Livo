@@ -4,6 +4,8 @@ import { createRoom } from '@/features/actions/lv111_room_new'
 import { RoomForm } from '../_RoomForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { AccessLogger } from '@/components/common/AccessLogger'
+import { SCREEN } from '@/constants/screens'
 
 export default async function RoomNewPage({
   params,
@@ -15,6 +17,7 @@ export default async function RoomNewPage({
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
+      <AccessLogger screenId={SCREEN.ROOM_NEW} />
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">部屋の登録</h1>
         <Button asChild variant="outline" size="sm">
