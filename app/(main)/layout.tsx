@@ -4,6 +4,7 @@ import { getMyAccount } from '@/features/auth/get-my-account'
 import { logout } from '@/features/actions/auth'
 import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
+import { ROLE_LABEL } from '@/constants/kbn'
 
 export default async function MainLayout({
   children,
@@ -13,6 +14,12 @@ export default async function MainLayout({
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
+  function roleBadgeClass(role: string) {
+    if (role === 'system') return 'bg-rose-100 text-rose-700'      // システム管理者
+    if (role === 'admin') return 'bg-amber-100 text-amber-700'     // 管理者
+    return 'bg-white/20 text-white'                                 // 一般
+  }
+
   return (
     <div className="min-h-screen bg-muted/40">
       <header className="bg-emerald-700 text-white shadow-sm print:hidden">
@@ -21,15 +28,17 @@ export default async function MainLayout({
             Livo
           </Link>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-white/80">{account.name}</span>
+            <div className="flex items-center gap-2">
+              {/* 権限バッジ */}
+              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${roleBadgeClass(account.role)}`}>
+                {ROLE_LABEL[account.role]}
+              </span>
+              {/* 名前 */}
+              <span className="text-sm text-white/90">{account.name}</span>
+            </div>
             <form action={logout}>
-              <Button
-                type="submit"
-                variant="ghost"
-                size="icon"
-                title="ログアウト"
-                className="text-white hover:bg-white/15 hover:text-white"
-              >
+              <Button type="submit" variant="ghost" size="icon"
+                className="text-white hover:bg-white/15 hover:text-white" title="ログアウト">
                 <LogOut className="h-4 w-4" />
               </Button>
             </form>
