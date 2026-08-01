@@ -24,6 +24,7 @@ import { BackLink } from '@/components/common/BackLink'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
+import { SubmitButton } from '@/components/common/SubmitButton'
 
 export default async function RoomDetailPage({
   params,
@@ -94,7 +95,7 @@ export default async function RoomDetailPage({
                   <Label htmlFor="bikou">備考</Label>
                   <Input id="bikou" name="bikou" />
                 </div>
-                <Button type="submit" size="sm">入居を記録</Button>
+                <SubmitButton>入居を記録</SubmitButton>
               </EnterToNextForm>
             </details>
           )}
@@ -116,7 +117,7 @@ export default async function RoomDetailPage({
                 <p className="text-xs text-muted-foreground">
                   退去すると準備工程({processes.map((p) => p.process_name).join('→')})が自動で作成されます。全工程を完了すると空室に戻ります。
                 </p>
-                <Button type="submit" size="sm" variant="destructive">退去して準備開始</Button>
+                <SubmitButton>退去して準備開始</SubmitButton>
               </form>
             </details>
           )}
@@ -162,7 +163,7 @@ export default async function RoomDetailPage({
                             required
                           />
                         </div>
-                        <Button type="submit" size="sm">この工程を完了</Button>
+                        <SubmitButton>この工程を完了</SubmitButton>
                       </form>
                     )}
                   </div>
