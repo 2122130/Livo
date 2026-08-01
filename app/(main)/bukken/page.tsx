@@ -75,6 +75,14 @@ export default async function BukkenPage({
               </Link>
             </TabsTrigger>
           )}
+          {hasSolar && (
+            <TabsTrigger value="solar" asChild>
+              <Link href="/bukken?tab=solar"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
+                太陽光
+              </Link>
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {hasRental && (
@@ -101,7 +109,14 @@ export default async function BukkenPage({
 
         {hasSolar && (
           <TabsContent value="solar">
-            <p className="text-sm text-muted-foreground">太陽光は準備中です。</p>
+            <div className="rounded-xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+              <p className="text-sm text-muted-foreground">
+                太陽光の物件管理はまだ作られていません。
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                今後のアップデートで対応予定です。
+              </p>
+            </div>
           </TabsContent>
         )}
       </Tabs>

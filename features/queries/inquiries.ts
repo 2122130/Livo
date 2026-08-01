@@ -84,7 +84,7 @@ export async function getTaiouRirekiDetail(taiouId: string) {
 
   const { data: t, error } = await supabase
     .from('t500_taiou_rireki')
-    .select('taiou_id, bukken_kbn, bukken_id, room_id, taiou_kbn, status_kbn, uketsuke_date, customer_name, customer_tel, content, uketsuke_account_id, tantou_account_id')
+    .select('taiou_id, bukken_kbn, bukken_id, room_id, taiou_kbn, status_kbn, uketsuke_date, customer_name, customer_tel, title, content, bikou, uketsuke_account_id, tantou_account_id')
     .eq('taiou_id', taiouId)
     .eq('mukou_kbn', 0)
     .single()
