@@ -15,21 +15,23 @@ export async function createTaiouRireki(
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
-  const bukkenId = formData.get('bukken_id') as string
-  if (!bukkenId) return { error: '物件を選択してください' }
+  const bukkenKbn = Number(formData.get('bukken_kbn'))
+
+  const bukkenId = bukkenKbn === 3 ? null : (formData.get('bukken_id') as string)
+  if (bukkenKbn !== 3 && !bukkenId) return { error: '物件を選択してください' }
 
   const content = (formData.get('content') as string)?.trim()
   if (!content) return { error: '対応内容を入力してください' }
 
   const supabase = await createClient()
 
-  const roomId = formData.get('room_id') as string
+  const roomId = bukkenKbn === 3 ? null : (formData.get('room_id') as string)
   const tantouId = formData.get('tantou_account_id') as string
 
   const { error } = await supabase.from('t500_taiou_rireki').insert({
     org_id: account.org_id,
-    bukken_kbn: Number(formData.get('bukken_kbn')),
-    bukken_id: formData.get('bukken_id') as string,
+    bukken_kbn: bukkenKbn,
+    bukken_id: bukkenId, 
     room_id: roomId || null,               // 賃貸で部屋指定なしならnull
     taiou_kbn: Number(formData.get('taiou_kbn')),
     status_kbn: Number(formData.get('status_kbn')),
@@ -58,28 +60,32 @@ export async function updateTaiouRireki(
   const account = await getMyAccount()
   if (!account) redirect('/login')
 
-  const bukkenId = formData.get('bukken_id') as string
-  if (!bukkenId) return { error: '物件を選択してください' }
+  const bukkenKbn = Number(formData.get('bukken_kbn'))
+
+  const bukkenId = bukkenKbn === 3 ? null : (formData.get('bukken_id') as string)
+  if (bukkenKbn !== 3 && !bukkenId) return { error: '物件を選択してください' }
 
   const content = (formData.get('content') as string)?.trim()
   if (!content) return { error: '対応内容を入力してください' }
 
   const supabase = await createClient()
-  const roomId = formData.get('room_id') as string
+  const roomId = bukkenKbn === 3 ? null : (formData.get('room_id') as string)
   const tantouId = formData.get('tantou_account_id') as string
 
   const { error } = await supabase
     .from('t500_taiou_rireki')
     .update({
-      bukken_kbn: Number(formData.get('bukken_kbn')),
-      bukken_id: formData.get('bukken_id') as string,
+      bukken_kbn: bukkenKbn,         // ← 計算済みの変数
+      bukken_id: bukkenId,           // ← 計算済みの変数(太陽光ならnull)
       room_id: roomId || null,
       taiou_kbn: Number(formData.get('taiou_kbn')),
       status_kbn: Number(formData.get('status_kbn')),
       uketsuke_date: formData.get('uketsuke_date') as string,
       customer_name: (formData.get('customer_name') as string) || null,
       customer_tel: (formData.get('customer_tel') as string) || null,
-      content: formData.get('content') as string,
+      title: (formData.get('title') as string) || null,   // ← 件名も追加(今のupdateには抜けている)
+      content: content,              // ← 計算済みの変数
+      bikou: (formData.get('bikou') as string) || null,   // ← 備考も追加(今のupdateには抜けている)
       uketsuke_account_id: formData.get('uketsuke_account_id') as string,
       tantou_account_id: tantouId || null,
       update_account: account.name,

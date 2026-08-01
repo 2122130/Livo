@@ -102,40 +102,47 @@ export function InquiryForm({
       </div>
 
       {/* 物件名・部屋 */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <Label htmlFor="bukken_id">物件名 *</Label>
-          <select id="bukken_id" name="bukken_id" required value={bukkenId}
-            onChange={(e) => setBukkenId(e.target.value)}
-            className="w-full rounded-md border bg-white px-3 py-2 text-sm">
-            <option value="">選択してください</option>
-            {bukkenOptions.map((b) => (
-              <option key={b.bukken_id} value={b.bukken_id}>{b.label}</option>
-            ))}
-          </select>
+      {bukkenKbn !== 3 && (
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <Label htmlFor="bukken_id">物件名 *</Label>
+            <select id="bukken_id" name="bukken_id" required value={bukkenId}
+              onChange={(e) => setBukkenId(e.target.value)}
+              className="w-full rounded-md border bg-white px-3 py-2 text-sm">
+              <option value="">選択してください</option>
+              {bukkenOptions.map((b) => (
+                <option key={b.bukken_id} value={b.bukken_id}>{b.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="room_id">部屋</Label>
+            {bukkenKbn === 1 ? (
+              <>
+                <select id="room_id" name="room_id" defaultValue={values?.room_id ?? ''}
+                  className="w-full rounded-md border bg-white px-3 py-2 text-sm">
+                  <option value="">指定しない</option>
+                  {roomOptions.map((r) => (
+                    <option key={r.room_id} value={r.room_id}>{r.room_number}</option>
+                  ))}
+                </select>
+                {bukkenId === '' && (
+                  <p className="text-xs text-muted-foreground">物件を選ぶと部屋が選べます</p>
+                )}
+              </>
+            ) : (
+              <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+                売買物件には部屋がありません
+              </div>
+            )}
+          </div>
         </div>
-        <div className="space-y-1">
-          <Label htmlFor="room_id">部屋</Label>
-          {bukkenKbn === 1 ? (
-            <>
-              <select id="room_id" name="room_id" defaultValue={values?.room_id ?? ''}
-                className="w-full rounded-md border bg-white px-3 py-2 text-sm">
-                <option value="">指定しない</option>
-                {roomOptions.map((r) => (
-                  <option key={r.room_id} value={r.room_id}>{r.room_number}</option>
-                ))}
-              </select>
-              {bukkenId === '' && (
-                <p className="text-xs text-muted-foreground">物件を選ぶと部屋が選べます</p>
-              )}
-            </>
-          ) : (
-            <div className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
-              売買物件には部屋がありません
-            </div>
-          )}
-        </div>
-      </div>
+      )}
+      {bukkenKbn === 3 && (
+        <p className="rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          太陽光は物件の紐付けなしで登録されます
+        </p>
+      )}
 
       {/* 相談者名・対応区分 */}
       <div className="grid grid-cols-2 gap-4">

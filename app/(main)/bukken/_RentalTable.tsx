@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { MapPin, Pencil } from 'lucide-react'
 import { BUKKEN_CATEGORY_LABEL, MANAGEMENT_TYPE_LABEL } from '@/constants/kbn'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
@@ -26,7 +27,6 @@ type SortKey = 'bukken_name' | 'bukken_category' | 'management_type' | 'vacancy'
 export function RentalTable({ rows }: { rows: Row[] }) {
   const [sortKey, setSortKey] = useState<SortKey>('bukken_name')
   const [asc, setAsc] = useState(true)
-  // 検索条件
   const [category, setCategory] = useState<number | 'all'>('all')
   const [management, setManagement] = useState<number | 'all'>('all')
   const [keyword, setKeyword] = useState('')
@@ -38,9 +38,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
     return true
   })
 
-  // 絞り込み後にソート
   const sorted = [...filtered].sort((a, b) => {
-    // 中身は既存のまま
     let av: string | number = ''
     let bv: string | number = ''
     switch (sortKey) {
@@ -63,7 +61,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
   const arrow = (key: SortKey) => (sortKey === key ? (asc ? ' ▲' : ' ▼') : '')
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+    <div className="space-y-4">
       {/* 検索条件 */}
       <Card>
         <CardContent className="space-y-3 pt-6">
@@ -111,45 +109,114 @@ export function RentalTable({ rows }: { rows: Row[] }) {
         </CardContent>
       </Card>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('bukken_name')}>物件名{arrow('bukken_name')}</TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('bukken_category')}>種別{arrow('bukken_category')}</TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('management_type')}>管理区分{arrow('management_type')}</TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('vacancy')}>空室数/総戸数{arrow('vacancy')}</TableHead>
-            <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('address')}>所在地{arrow('address')}</TableHead>
-            <TableHead className="w-20 text-center">編集</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sorted.length === 0 && (
+      <p className="text-sm text-muted-foreground">該当: {sorted.length}件 / 総数: {rows.length}件</p>
+
+      {/* PC: テーブル表示(md以上) */}
+      <div className="hidden md:block rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground">
-                登録された賃貸物件がありません
-              </TableCell>
+              <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('bukken_name')}>物件名{arrow('bukken_name')}</TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('bukken_category')}>種別{arrow('bukken_category')}</TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('management_type')}>管理区分{arrow('management_type')}</TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('vacancy')}>空室数/総戸数{arrow('vacancy')}</TableHead>
+              <TableHead className="cursor-pointer select-none" onClick={() => toggleSort('address')}>所在地{arrow('address')}</TableHead>
+              <TableHead className="w-20 text-center">編集</TableHead>
             </TableRow>
-          )}
-          {sorted.map((b) => (
-            <TableRow key={b.bukken_id}>
-              <TableCell className="p-0">
-                <Link href={`/bukken/rental/${b.bukken_id}/rooms`} className="block px-4 py-3 font-medium hover:underline">
-                  {b.bukken_name}
+          </TableHeader>
+          <TableBody>
+            {sorted.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center text-muted-foreground">
+                  登録された賃貸物件がありません
+                </TableCell>
+              </TableRow>
+            )}
+            {sorted.map((b) => (
+              <TableRow key={b.bukken_id}>
+                <TableCell className="p-0">
+                  <Link href={`/bukken/rental/${b.bukken_id}/rooms`} className="block px-4 py-3 font-medium hover:underline">
+                    {b.bukken_name}
+                  </Link>
+                </TableCell>
+                <TableCell>{BUKKEN_CATEGORY_LABEL[b.bukken_category]}</TableCell>
+                <TableCell>{MANAGEMENT_TYPE_LABEL[b.management_type]}</TableCell>
+                <TableCell>{b.vacant_units}/{b.total_units}</TableCell>
+                <TableCell>{b.address ?? '—'}</TableCell>
+                <TableCell className="text-center">
+                  <Button asChild variant="outline" size="sm">
+                    <Link href={`/bukken/rental/${b.bukken_id}/edit`}>編集</Link>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* スマホ: カード表示(md未満) */}
+      <div className="md:hidden space-y-3">
+        {sorted.length === 0 && (
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm text-muted-foreground">
+            登録された賃貸物件がありません
+          </p>
+        )}
+        {sorted.map((b) => (
+          <div
+            key={b.bukken_id}
+            className="relative rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all active:scale-[0.99] hover:border-emerald-300 hover:shadow-md"
+          >
+            {/* カード全体をタップ可能にする透明リンク(修正ボタンの下に敷く) */}
+            <Link
+              href={`/bukken/rental/${b.bukken_id}/rooms`}
+              className="absolute inset-0 z-0 rounded-xl"
+              aria-label={`${b.bukken_name} の部屋一覧へ`}
+            />
+
+            {/* 上段: 物件名 + 空室数 */}
+            <div className="relative z-10 flex items-start justify-between gap-3 pointer-events-none">
+              <div className="min-w-0">
+                <h3 className="font-bold text-slate-900 truncate">{b.bukken_name}</h3>
+                {/* タグ */}
+                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 border border-emerald-200">
+                    {BUKKEN_CATEGORY_LABEL[b.bukken_category]}
+                  </span>
+                  <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 border border-slate-200">
+                    {MANAGEMENT_TYPE_LABEL[b.management_type]}
+                  </span>
+                </div>
+              </div>
+              {/* 空室/総戸数 */}
+              <div className="shrink-0 text-right">
+                <p className="text-[10px] text-slate-400 font-medium">空室 / 総戸数</p>
+                <p className="leading-none">
+                  <span className={`text-2xl font-bold ${b.vacant_units > 0 ? 'text-emerald-600' : 'text-slate-300'}`}>
+                    {b.vacant_units}
+                  </span>
+                  <span className="text-sm text-slate-400 font-medium"> / {b.total_units}</span>
+                </p>
+              </div>
+            </div>
+
+            {/* 所在地 */}
+            <div className="relative z-10 mt-2 flex items-center gap-1 text-xs text-slate-500 pointer-events-none">
+              <MapPin className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">{b.address ?? '所在地未設定'}</span>
+            </div>
+
+            {/* 修正ボタン(カードリンクより前面。独立して遷移) */}
+            <div className="relative z-10 mt-3 flex justify-end">
+              <Button asChild variant="outline" size="sm" className="pointer-events-auto">
+                <Link href={`/bukken/rental/${b.bukken_id}/edit`}>
+                  <Pencil className="mr-1 h-3.5 w-3.5" />
+                  修正
                 </Link>
-              </TableCell>
-              <TableCell>{BUKKEN_CATEGORY_LABEL[b.bukken_category]}</TableCell>
-              <TableCell>{MANAGEMENT_TYPE_LABEL[b.management_type]}</TableCell>
-              <TableCell>{b.vacant_units}/{b.total_units}</TableCell>
-              <TableCell>{b.address ?? '—'}</TableCell>
-              <TableCell className="text-center">
-                <Button asChild variant="outline" size="sm">
-                  <Link href={`/bukken/rental/${b.bukken_id}/edit`}>編集</Link>
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

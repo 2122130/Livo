@@ -19,6 +19,7 @@ export default async function InquiriesPage({
   const rows = await getTaiouRirekiList()
   const rentalRows = rows.filter((r) => r.bukken_kbn === 1)
   const saleRows = rows.filter((r) => r.bukken_kbn === 2)
+  const solarRows = rows.filter((r) => r.bukken_kbn === 3)
 
   return (
     <div className="space-y-4">
@@ -41,6 +42,12 @@ export default async function InquiriesPage({
               売買
             </Link>
           </TabsTrigger>
+          <TabsTrigger value="solar" asChild>
+            <Link href="/inquiries?tab=solar"
+              className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
+              太陽光
+            </Link>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="rental" className="space-y-3">
@@ -59,6 +66,15 @@ export default async function InquiriesPage({
             </Button>
           </div>
           <InquiryTable rows={saleRows} />
+        </TabsContent>
+
+        <TabsContent value="solar" className="space-y-3">
+          <div className="flex justify-end">
+            <Button asChild size="sm">
+              <Link href="/inquiries/new?kbn=3">＋ 対応履歴を登録(太陽光)</Link>
+            </Button>
+          </div>
+          <InquiryTable rows={solarRows} />
         </TabsContent>
       </Tabs>
     </div>

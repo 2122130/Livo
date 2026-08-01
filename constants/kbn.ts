@@ -66,7 +66,7 @@ export const TAIOU_STATUS_LABEL: Record<number, string> = {
 }
 
 // 物件区分(対応履歴の対象)
-export const BUKKEN_KBN = { RENTAL: 1, SALE: 2 } as const
+export const BUKKEN_KBN = { RENTAL: 1, SALE: 2, SOLAR: 3 } as const
 export const BUKKEN_KBN_LABEL: Record<number, string> = {
-  1: '賃貸', 2: '売買',
+  1: '賃貸', 2: '売買', 3: '太陽光',
 }

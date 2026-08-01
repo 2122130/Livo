@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { Building2, User, Pencil } from 'lucide-react'
 import {
   TAIOU_KBN_LABEL, TAIOU_STATUS_LABEL
 } from '@/constants/kbn'
@@ -31,12 +32,10 @@ type Row = {
 
 type SortKey = 'status_kbn' | 'uketsuke_date' | 'uketsuke_name' | 'bukken_name' | 'customer_name' | 'title' | 'tantou_name' | 'bikou'
 
-// 'YYYY-MM-DD' → 'YYYY/MM/DD'
 function formatDate(d: string) {
   return d.replaceAll('-', '/')
 }
 
-// 受付日からの経過日数
 function daysElapsed(d: string) {
   const from = new Date(d)
   const today = new Date()
@@ -44,6 +43,20 @@ function daysElapsed(d: string) {
   today.setHours(0, 0, 0, 0)
   const diff = Math.floor((today.getTime() - from.getTime()) / (1000 * 60 * 60 * 24))
   return diff
+}
+
+// 進捗ごとの色(未対応=ローズ, 対応中=アンバー, 完了=スレート)
+function statusPillClass(s: number) {
+  if (s === 1) return 'bg-rose-50 text-rose-600 border-rose-200'
+  if (s === 2) return 'bg-amber-50 text-amber-700 border-amber-200'
+  return 'bg-slate-100 text-slate-500 border-slate-200'
+}
+
+// 対応区分の色
+function kbnPillClass(k: number) {
+  if (k === 1) return 'bg-emerald-50 text-emerald-700 border-emerald-200'  // 契約相談
+  if (k === 2) return 'bg-rose-50 text-rose-600 border-rose-200'           // クレーム
+  return 'bg-violet-50 text-violet-700 border-violet-200'                  // その他
 }
 
 export function InquiryTable({ rows }: { rows: Row[] }) {
@@ -131,7 +144,8 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
 
       <p className="text-sm text-muted-foreground">{sorted.length}件</p>
 
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      {/* PC: テーブル表示(md以上) */}
+      <div className="hidden md:block rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -183,6 +197,75 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
             ))}
           </TableBody>
         </Table>
+      </div>
+
+      {/* スマホ: カード表示(md未満) — モックデザイン */}
+      <div className="md:hidden space-y-3">
+        {sorted.length === 0 && (
+          <p className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm text-muted-foreground">
+            該当する対応履歴がありません
+          </p>
+        )}
+        {sorted.map((r) => (
+          <div
+            key={r.taiou_id}
+            className="relative rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all active:scale-[0.99] hover:border-emerald-300 hover:shadow-md"
+          >
+            {/* カード全体タップで編集へ */}
+            <Link
+              href={`/inquiries/${r.taiou_id}/edit`}
+              className="absolute inset-0 z-0 rounded-xl"
+              aria-label="対応履歴を編集"
+            />
+
+            {/* 上段: 進捗・対応区分バッジ(左) + 受付日・経過(右) */}
+            <div className="relative z-10 flex items-start justify-between gap-2 pointer-events-none">
+              <div className="flex flex-wrap gap-1.5">
+                <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-bold ${statusPillClass(r.status_kbn)}`}>
+                  {TAIOU_STATUS_LABEL[r.status_kbn]}
+                </span>
+                <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${kbnPillClass(r.taiou_kbn)}`}>
+                  {TAIOU_KBN_LABEL[r.taiou_kbn]}
+                </span>
+              </div>
+              <div className="shrink-0 text-right">
+                <p className="text-xs font-medium text-slate-500">{formatDate(r.uketsuke_date)}</p>
+                <p className="text-[10px] text-rose-500 font-medium">{daysElapsed(r.uketsuke_date)}日経過</p>
+              </div>
+            </div>
+
+            {/* 件名(大) */}
+            <h3 className="relative z-10 mt-2 font-bold text-slate-900 pointer-events-none">
+              {r.title ?? '(件名なし)'}
+            </h3>
+
+            {/* 物件・部屋(建物アイコン) */}
+            <div className="relative z-10 mt-1 flex items-center gap-1 text-xs text-slate-500 pointer-events-none">
+              <Building2 className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">
+                {r.bukken_name}{r.room_number && ` ／ ${r.room_number}`}
+              </span>
+            </div>
+
+            {/* 下段: 担当者(人アイコン) + 修正ボタン */}
+            <div className="relative z-10 mt-3 flex items-center justify-between gap-2 border-t border-slate-100 pt-3">
+              <div className="flex items-center gap-1 text-xs pointer-events-none">
+                <User className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                {r.tantou_name ? (
+                  <span className="text-slate-600">担当: {r.tantou_name}</span>
+                ) : (
+                  <span className="font-medium text-amber-600">担当未定</span>
+                )}
+              </div>
+              <Button asChild variant="outline" size="sm" className="pointer-events-auto">
+                <Link href={`/inquiries/${r.taiou_id}/edit`}>
+                  <Pencil className="mr-1 h-3.5 w-3.5" />
+                  修正
+                </Link>
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
