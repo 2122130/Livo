@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
+import { Printer } from 'lucide-react'
 
 type Row = {
   room_id: string
@@ -61,7 +62,7 @@ export function VacancyTable({ rows }: { rows: Row[] }) {
   return (
     <div className="space-y-4">
       {/* 検索条件 */}
-      <Card>
+      <Card className="print:hidden">
         <CardContent className="space-y-3 pt-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="space-y-1">
@@ -89,10 +90,24 @@ export function VacancyTable({ rows }: { rows: Row[] }) {
         </CardContent>
       </Card>
 
-      <p className="text-sm text-muted-foreground">{sorted.length}件</p>
+      {/* <p className="text-sm text-muted-foreground">{sorted.length}件</p> */}
+      {/* 件数 + 印刷ボタン */}
+      <div className="flex items-center justify-between print:hidden">
+        <p className="text-sm text-muted-foreground">{sorted.length}件</p>
+        <Button variant="outline" size="sm" onClick={() => window.print()}>
+          <Printer className="mr-1 h-4 w-4" />
+          印刷
+        </Button>
+      </div>
+
+      {/* 印刷時だけ表示される見出し(ステップ2) ← ここ */}
+      <div className="hidden print:block mb-4">
+        <h2 className="text-lg font-bold">空室一覧</h2>
+        <p className="text-sm">{sorted.length}件 / 出力日: {new Date().toLocaleDateString('ja-JP')}</p>
+      </div>
 
       {/* PC: テーブル表示(md以上) */}
-      <div className="hidden md:block rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+      <div className="hidden md:block print:block rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
@@ -136,7 +151,7 @@ export function VacancyTable({ rows }: { rows: Row[] }) {
       </div>
 
       {/* スマホ: カード表示(md未満) — モックデザイン */}
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden print:hidden space-y-3">
         {sorted.length === 0 && (
           <p className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm text-muted-foreground">
             該当する空室がありません

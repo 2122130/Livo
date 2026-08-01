@@ -15,7 +15,7 @@ export default async function MainLayout({
 
   return (
     <div className="min-h-screen bg-muted/40">
-      <header className="bg-emerald-700 text-white shadow-sm">
+      <header className="bg-emerald-700 text-white shadow-sm print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link href="/" className="font-semibold tracking-wide hover:opacity-80">
             Livo
