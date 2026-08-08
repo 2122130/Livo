@@ -17,35 +17,44 @@ export default async function LoginPage({
     <div className="min-h-screen">
       {/* 深緑ヘッダー(システム名のみ) */}
       <header className="bg-emerald-700 text-white shadow-sm">
-        <div className="mx-auto max-w-6xl px-4 py-3">
-          <span className="font-semibold tracking-wide">Livo</span>
+        <div className="mx-auto flex h-14 max-w-6xl items-center px-4">
+          <span className="flex items-center gap-2 text-xl font-bold tracking-wide">
+            <img src="/logos/Livo_logo丸.png" alt="Livo" className="h-8 w-8 object-contain" />
+            Livo
+          </span>
         </div>
       </header>
       
-      <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
-        <Card className="w-full max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-center text-xl">ログイン</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form action={login} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">メールアドレス</Label>
-                <Input id="email" name="email" type="email" required />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">パスワード</Label>
-                <Input id="password" name="password" type="password" required />
-              </div>
-              {hasError && (
-                <p className="text-sm text-red-600">
-                  メールアドレスまたはパスワードが正しくありません
-                </p>
-              )}
-              <SubmitButton className="w-full">ログイン</SubmitButton>
-            </form>
-          </CardContent>
-        </Card>
+      <div className="flex items-center justify-center px-4 py-20">
+        <div className="w-full max-w-md">
+          <div className="mb-4 flex justify-center">
+            <img src="/logos/Livo_logo.png" alt="Livo" className="h-20 w-20 object-contain" />
+          </div>
+          
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-center text-xl">ログイン</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action={login} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">メールアドレス</Label>
+                  <Input id="email" name="email" type="email" required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">パスワード</Label>
+                  <Input id="password" name="password" type="password" required />
+                </div>
+                {hasError && (
+                  <p className="text-sm text-red-600">
+                    メールアドレスまたはパスワードが正しくありません
+                  </p>
+                )}
+                <SubmitButton className="w-full">ログイン</SubmitButton>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
     
