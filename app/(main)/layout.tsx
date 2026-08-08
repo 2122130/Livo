@@ -25,7 +25,7 @@ export default async function MainLayout({
       <header className="bg-emerald-700 text-white shadow-sm print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-wide hover:opacity-80">
-            <img src="/logos/livo_logo丸.png" alt="Livo" className="h-8 w-8 object-contain" />
+            <img src="/logos/Livo_logo丸.png" alt="Livo" className="h-8 w-8 object-contain" />
             Livo
           </Link>
           <div className="flex items-center gap-3">
