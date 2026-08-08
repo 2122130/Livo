@@ -1,7 +1,8 @@
 // src/features/auth/get-my-account.ts
+import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 
-export async function getMyAccount() {
+export const getMyAccount = cache(async () => {
   const supabase = await createClient()
   const {
     data: { user },
@@ -16,4 +17,4 @@ export async function getMyAccount() {
     .single()
 
   return data
-}
+})
