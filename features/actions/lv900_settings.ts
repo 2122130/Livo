@@ -13,7 +13,7 @@ export async function sendPasswordReset() {
   if (!user?.email) redirect('/login')
 
   const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/login`,
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/reset-password`,  // ← /login から変更
   })
   if (error) throw error
 

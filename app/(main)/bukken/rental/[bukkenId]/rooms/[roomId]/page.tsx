@@ -25,6 +25,9 @@ import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
 import { SubmitButton } from '@/components/common/SubmitButton'
+import { getRoomImages } from '@/features/queries/room-image'
+import { uploadRoomImage, deleteRoomImage } from '@/features/actions/lv112_room_image'
+import { RoomImageSection } from './_RoomImageSection'
 
 export default async function RoomDetailPage({
   params,
@@ -54,6 +57,8 @@ export default async function RoomDetailPage({
   // 工程コード→工程名の変換用
   const processName = (code: number) =>
     processes.find((p) => p.process_code === code)?.process_name ?? `工程${code}`
+
+  const images = await getRoomImages(roomId)
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -185,6 +190,8 @@ export default async function RoomDetailPage({
           />
         </CardContent>
       </Card>
+
+      <RoomImageSection images={images} roomId={roomId} bukkenId={bukkenId} />
     </div>
   )
 }

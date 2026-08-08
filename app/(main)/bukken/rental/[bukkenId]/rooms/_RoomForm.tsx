@@ -76,6 +76,8 @@ export function RoomForm({
           defaultValue={values?.guarantee_company ?? ''} />
       </div>
 
+      
+
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">
           <Link href={backHref}>キャンセル</Link>
