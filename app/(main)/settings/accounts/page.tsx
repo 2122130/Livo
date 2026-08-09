@@ -15,6 +15,7 @@ import {
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
+import { ResetPasswordButton } from './_ResetPasswordButton'
 
 export default async function AccountsPage({
   searchParams,
@@ -44,7 +45,7 @@ export default async function AccountsPage({
 
       {created === '1' && (
         <div className="rounded-md border border-green-600/40 bg-green-50 p-3 text-sm text-green-800">
-          招待メールを送信しました。相手がメールからパスワードを設定するとログインできます。
+          アカウントを作成しました。設定したパスワードを本人にお伝えください。
         </div>
       )}
 
@@ -76,6 +77,14 @@ export default async function AccountsPage({
                 <Label htmlFor="email">メールアドレス *</Label>
                 <Input id="email" name="email" type="email" required />
               </div>
+              <div className="space-y-1">
+                <Label htmlFor="password">初期パスワード *</Label>
+                <Input id="password" name="password" type="text" required minLength={4}
+                  placeholder="4文字以上" />
+                <p className="text-xs text-muted-foreground">
+                  作成後、このパスワードを本人にお伝えください。
+                </p>
+              </div>
             </div>
 
             {/* システム管理者は権限を選べる。adminは一般固定 */}
@@ -95,7 +104,7 @@ export default async function AccountsPage({
             )}
 
             <div className="flex justify-end">
-              <Button type="submit">招待メールを送る</Button>
+              <Button type="submit">アカウントを作成</Button>
             </div>
           </form>
         </CardContent>
@@ -108,6 +117,7 @@ export default async function AccountsPage({
             アカウント一覧
             <span className="ml-2 text-sm font-normal text-muted-foreground">
               {data.accounts.length}件
+              {data.maxAccounts != null && ` / 最大${data.maxAccounts}件`}
             </span>
           </CardTitle>
         </CardHeader>
@@ -119,12 +129,13 @@ export default async function AccountsPage({
                   {isSystem && <TableHead>組織</TableHead>}
                   <TableHead>氏名</TableHead>
                   <TableHead>権限</TableHead>
+                  <TableHead>操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data.accounts.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={isSystem ? 3 : 2} className="text-center text-muted-foreground">
+                    <TableCell colSpan={isSystem ? 4 : 3} className="text-center text-muted-foreground">
                       アカウントがありません
                     </TableCell>
                   </TableRow>
@@ -140,6 +151,11 @@ export default async function AccountsPage({
                       }>
                         {ROLE_LABEL[a.role]}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {a.role === ROLE.MEMBER && (
+                        <ResetPasswordButton accountId={a.account_id} accountName={a.name} />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

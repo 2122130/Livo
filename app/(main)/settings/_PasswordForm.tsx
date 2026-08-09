@@ -11,7 +11,7 @@ export function PasswordForm() {
 
   return (
     <form action={formAction} className="space-y-3">
-      <p className="text-sm font-medium">パスワードの変更</p>
+      <p className="text-sm font-medium text-muted-foreground">パスワードの変更</p>
       {state.error && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
           {state.error}
@@ -23,12 +23,7 @@ export function PasswordForm() {
         </div>
       )}
       <div className="space-y-1">
-        <Label htmlFor="password">新しいパスワード</Label>
         <Input id="password" name="password" type="password" required />
-      </div>
-      <div className="space-y-1">
-        <Label htmlFor="confirm">新しいパスワード(確認)</Label>
-        <Input id="confirm" name="confirm" type="password" required />
       </div>
       <SubmitButton>パスワードを変更する</SubmitButton>
     </form>

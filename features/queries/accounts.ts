@@ -32,7 +32,8 @@ export async function getAccountList() {
         ...a,
         org_name: orgMap.get(a.org_id)?.org_name ?? '',
       })),
-      orgs: orgs ?? [],   // 組織選択用
+      orgs: orgs ?? [],          // 組織選択用
+      maxAccounts: null,         // systemは組織をまたぐのでnull
     }
   }
 
@@ -50,6 +51,8 @@ export async function getAccountList() {
     .eq('org_id', me.org_id)
     .single()
 
+    console.log('DEBUG org:', org, 'me.role:', me.role)
+
   return {
     isSystem: false,
     accounts: (accounts ?? []).map((a) => ({
@@ -57,5 +60,6 @@ export async function getAccountList() {
       org_name: org?.org_name ?? '',
     })),
     orgs: org ? [org] : [],
+    maxAccounts: org?.max_accounts ?? null,
   }
 }

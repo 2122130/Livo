@@ -58,7 +58,7 @@ export default async function SettingsPage({
               </Badge>
             ))}
           </div>
-          <div className="border-t pt-4">
+          <div className="pt-2">
             <PasswordForm />
           </div>
         </CardContent>

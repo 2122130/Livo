@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { SubmitButton } from '@/components/common/SubmitButton'
+import { ForgotPasswordModal } from './_ForgotPasswordModal'
 
 export default async function LoginPage({
   searchParams,
@@ -51,6 +52,10 @@ export default async function LoginPage({
                   </p>
                 )}
                 <SubmitButton className="w-full">ログイン</SubmitButton>
+
+                <div className="text-center">
+                  <ForgotPasswordModal />
+                </div>
               </form>
             </CardContent>
           </Card>
