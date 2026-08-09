@@ -7,18 +7,18 @@ import { getMyAccount } from '@/features/auth/get-my-account'
 import { ROLE } from '@/constants/kbn'
 import { revalidatePath } from 'next/cache'
 
-export async function sendPasswordReset() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user?.email) redirect('/login')
+// export async function sendPasswordReset() {
+//   const supabase = await createClient()
+//   const { data: { user } } = await supabase.auth.getUser()
+//   if (!user?.email) redirect('/login')
 
-  const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/reset-password`,  // ← /login から変更
-  })
-  if (error) throw error
+//   const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+//     redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/reset-password`,  // ← /login から変更
+//   })
+//   if (error) throw error
 
-  redirect('/settings?reset=sent')
-}
+//   redirect('/settings?reset=sent')
+// }
 
 export async function createAccount(formData: FormData) {
   const me = await getMyAccount()
@@ -69,4 +69,32 @@ export async function createAccount(formData: FormData) {
 
   revalidatePath('/settings/accounts')
   redirect('/settings/accounts?created=1')
+}
+
+export type PasswordFormState = { error: string | null; success: boolean }
+
+export async function updateMyPassword(
+  _prevState: PasswordFormState,
+  formData: FormData
+): Promise<PasswordFormState> {
+  const account = await getMyAccount()
+  if (!account) redirect('/login')
+
+  const password = formData.get('password') as string
+  const confirm = formData.get('confirm') as string
+
+  if (!password || password.length < 6) {
+    return { error: 'パスワードは6文字以上で入力してください', success: false }
+  }
+  if (password !== confirm) {
+    return { error: 'パスワードが一致しません', success: false }
+  }
+
+  const supabase = await createClient()
+  const { error } = await supabase.auth.updateUser({ password })
+  if (error) {
+    return { error: 'パスワードの更新に失敗しました', success: false }
+  }
+
+  return { error: null, success: true }
 }

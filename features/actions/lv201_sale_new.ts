@@ -50,40 +50,43 @@ export async function createSaleBukken(
   const bukkenId = created.bukken_id
 
   // 2. 種別ごとの詳細テーブルにINSERT
-  let detailData: Record<string, unknown> = { bukken_id: bukkenId, create_account: account.name }
+  const detailTable = DETAIL_TABLE[category]
+  if (detailTable) {
+    let detailData: Record<string, unknown> = { bukken_id: bukkenId, create_account: account.name }
 
-  if (category === 1) { // マンション
-    detailData = {
-      ...detailData,
-      floor_plan: (formData.get('floor_plan') as string) || null,
-      exclusive_area: toNum(formData.get('exclusive_area')),
+    if (category === 1) { // マンション
+      detailData = {
+        ...detailData,
+        floor_plan: (formData.get('floor_plan') as string) || null,
+        exclusive_area: toNum(formData.get('exclusive_area')),
+      }
+    } else if (category === 2) { // アパート
+      detailData = {
+        ...detailData,
+        yield_rate: toNum(formData.get('yield_rate')),
+        total_floor_area: toNum(formData.get('total_floor_area')),
+        land_area: toNum(formData.get('land_area')),
+      }
+    } else if (category === 3) { // 戸建て
+      detailData = {
+        ...detailData,
+        floor_plan: (formData.get('floor_plan') as string) || null,
+        total_floor_area: toNum(formData.get('total_floor_area')),
+        land_area: toNum(formData.get('land_area')),
+      }
+    } else if (category === 4) { // 土地
+      detailData = {
+        ...detailData,
+        land_area: toNum(formData.get('land_area')),
+        current_status: toNum(formData.get('current_status')),
+      }
     }
-  } else if (category === 2) { // アパート
-    detailData = {
-      ...detailData,
-      yield_rate: toNum(formData.get('yield_rate')),
-      total_floor_area: toNum(formData.get('total_floor_area')),
-      land_area: toNum(formData.get('land_area')),
-    }
-  } else if (category === 3) { // 戸建て
-    detailData = {
-      ...detailData,
-      floor_plan: (formData.get('floor_plan') as string) || null,
-      total_floor_area: toNum(formData.get('total_floor_area')),
-      land_area: toNum(formData.get('land_area')),
-    }
-  } else if (category === 4) { // 土地
-    detailData = {
-      ...detailData,
-      land_area: toNum(formData.get('land_area')),
-      current_status: toNum(formData.get('current_status')),
-    }
+
+    const { error: detailError } = await supabase
+      .from(detailTable)
+      .insert(detailData)
+    if (detailError) return { error: '詳細情報の登録に失敗しました。' }
   }
-
-  const { error: detailError } = await supabase
-    .from(DETAIL_TABLE[category])
-    .insert(detailData)
-  if (detailError) return { error: '詳細情報の登録に失敗しました。' }
 
   revalidatePath('/bukken')
   redirect('/bukken?tab=sale')
@@ -117,32 +120,35 @@ export async function updateSaleBukken(
   if (error) return { error: '更新に失敗しました。' }
 
   // 2. 種別詳細テーブルを更新
-  let detailData: Record<string, unknown> = { update_account: account.name }
-  if (category === 1) {
-    detailData = { ...detailData,
-      floor_plan: (formData.get('floor_plan') as string) || null,
-      exclusive_area: toNum(formData.get('exclusive_area')) }
-  } else if (category === 2) {
-    detailData = { ...detailData,
-      yield_rate: toNum(formData.get('yield_rate')),
-      total_floor_area: toNum(formData.get('total_floor_area')),
-      land_area: toNum(formData.get('land_area')) }
-  } else if (category === 3) {
-    detailData = { ...detailData,
-      floor_plan: (formData.get('floor_plan') as string) || null,
-      total_floor_area: toNum(formData.get('total_floor_area')),
-      land_area: toNum(formData.get('land_area')) }
-  } else if (category === 4) {
-    detailData = { ...detailData,
-      land_area: toNum(formData.get('land_area')),
-      current_status: toNum(formData.get('current_status')) }
-  }
+  const detailTable = DETAIL_TABLE[category]
+  if (detailTable) {
+    let detailData: Record<string, unknown> = { update_account: account.name }
+    if (category === 1) {
+      detailData = { ...detailData,
+        floor_plan: (formData.get('floor_plan') as string) || null,
+        exclusive_area: toNum(formData.get('exclusive_area')) }
+    } else if (category === 2) {
+      detailData = { ...detailData,
+        yield_rate: toNum(formData.get('yield_rate')),
+        total_floor_area: toNum(formData.get('total_floor_area')),
+        land_area: toNum(formData.get('land_area')) }
+    } else if (category === 3) {
+      detailData = { ...detailData,
+        floor_plan: (formData.get('floor_plan') as string) || null,
+        total_floor_area: toNum(formData.get('total_floor_area')),
+        land_area: toNum(formData.get('land_area')) }
+    } else if (category === 4) {
+      detailData = { ...detailData,
+        land_area: toNum(formData.get('land_area')),
+        current_status: toNum(formData.get('current_status')) }
+    }
 
-  const { error: detailError } = await supabase
-    .from(DETAIL_TABLE[category])
-    .update(detailData)
-    .eq('bukken_id', bukkenId)
-  if (detailError) return { error: '詳細情報の更新に失敗しました。' }
+    const { error: detailError } = await supabase
+      .from(detailTable)
+      .update(detailData)
+      .eq('bukken_id', bukkenId)
+    if (detailError) return { error: '詳細情報の更新に失敗しました。' }
+  }
 
   revalidatePath('/bukken')
   redirect(`/bukken/sale/${bukkenId}`)

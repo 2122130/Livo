@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { getSettingsInfo } from '@/features/queries/settings'
-import { sendPasswordReset } from '@/features/actions/lv900_settings'
+import { PasswordForm } from './_PasswordForm'
 import { BackLink } from '@/components/common/BackLink'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -58,11 +58,9 @@ export default async function SettingsPage({
               </Badge>
             ))}
           </div>
-          <form action={sendPasswordReset}>
-            <Button type="submit" variant="outline" size="sm">
-              パスワード再設定メールを送る
-            </Button>
-          </form>
+          <div className="border-t pt-4">
+            <PasswordForm />
+          </div>
         </CardContent>
       </Card>
 

@@ -13,10 +13,10 @@ export const ROLE_LABEL: Record<string, string> = {
 
 // 物件種別
 export const BUKKEN_CATEGORY = {
-  MANSION: 1, APARTMENT: 2, HOUSE: 3, LAND: 4,
+  MANSION: 1, APARTMENT: 2, HOUSE: 3, LAND: 4, STORE: 5, OTHER: 6
 } as const
 export const BUKKEN_CATEGORY_LABEL: Record<number, string> = {
-  1: 'マンション', 2: 'アパート', 3: '戸建て', 4: '土地',
+  1: 'マンション', 2: 'アパート', 3: '戸建て', 4: '土地', 5: '店舗', 6: 'その他'
 }
 
 // 管理区分
