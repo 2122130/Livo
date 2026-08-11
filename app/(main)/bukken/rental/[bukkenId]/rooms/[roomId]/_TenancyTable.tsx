@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { toWareki } from '@/lib/date'
+import { FileModal } from './_FileModal'
+import { TenancyDetailModal } from './_TenancyDetailModal'
 
-type Step = { process_code: number; status_kbn: number; end_date: string | null }
+type Step = { prep_id: string; process_code: number; status_kbn: number; end_date: string | null }
 type Row = {
   tenancy_id: string
   tenant_name: string
@@ -17,25 +17,37 @@ type Row = {
   steps: Step[]
 }
 type Process = { process_code: number; process_name: string; sort_order: number }
+type TenancyFile = {
+  file_id: string
+  file_category: number
+  storage_path: string
+  file_name: string | null
+  url: string | null
+}
 
 export function TenancyTable({
   rows,
   processes,
-  updateBikou,
+  filesMap,
+  roomId,
+  bukkenId,
 }: {
   rows: Row[]
   processes: Process[]
-  updateBikou: (tenancyId: string, formData: FormData) => void
+  filesMap: Record<string, TenancyFile[]>
+  roomId: string
+  bukkenId: string
 }) {
-  // 工程を実施順に並べる(列見出し用)
   const orderedProcesses = [...processes].sort((a, b) => a.sort_order - b.sort_order)
 
-  // 各入居行の、指定工程の完了日を返す
   const cellForProcess = (steps: Step[], code: number) => {
     const step = steps.find((s) => s.process_code === code)
     if (!step) return '—'
-    return step.status_kbn === 2 ? (step.end_date ?? '完了') : '作業中'
+    return step.status_kbn === 2 ? '済' : '作業中'
   }
+
+  // 入居者+入居日+退去日+工程+備考+詳細+資料
+  const totalCols = 6 + orderedProcesses.length
 
   return (
     <div className="rounded-md border bg-white overflow-x-auto">
@@ -48,68 +60,59 @@ export function TenancyTable({
             {orderedProcesses.map((p) => (
               <TableHead key={p.process_code}>{p.process_name}</TableHead>
             ))}
-            <TableHead className="min-w-[220px]">備考</TableHead>
+            <TableHead className="min-w-[180px]">備考</TableHead>
+            <TableHead>詳細</TableHead>
+            <TableHead>資料</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4 + orderedProcesses.length} className="text-center text-muted-foreground">
+              <TableCell colSpan={totalCols} className="text-center text-muted-foreground">
                 入居履歴がありません
               </TableCell>
             </TableRow>
           )}
-          {rows.map((r) => (
-            <TableRow key={r.tenancy_id}>
-              <TableCell className="font-medium">{r.tenant_name}</TableCell>
-              <TableCell>{r.move_in_date}</TableCell>
-              <TableCell>{r.move_out_date ?? '入居中'}</TableCell>
-              {orderedProcesses.map((p) => (
-                <TableCell key={p.process_code}>
-                  {cellForProcess(r.steps, p.process_code)}
+          {rows.map((r) => {
+            const files = filesMap[r.tenancy_id] ?? []
+            return (
+              <TableRow key={r.tenancy_id}>
+                <TableCell className="font-medium">{r.tenant_name}</TableCell>
+                <TableCell>{toWareki(r.move_in_date)}</TableCell>
+                <TableCell>{r.move_out_date ? toWareki(r.move_out_date) : '入居中'}</TableCell>
+                {orderedProcesses.map((p) => (
+                  <TableCell key={p.process_code}>
+                    {cellForProcess(r.steps, p.process_code)}
+                  </TableCell>
+                ))}
+                <TableCell>{r.bikou || '—'}</TableCell>
+                <TableCell>
+                  <TenancyDetailModal
+                    tenancyId={r.tenancy_id}
+                    roomId={roomId}
+                    bukkenId={bukkenId}
+                    tenantName={r.tenant_name}
+                    moveInDate={r.move_in_date}
+                    moveOutDate={r.move_out_date}
+                    bikou={r.bikou}
+                    steps={r.steps}
+                    processes={processes}
+                  />
                 </TableCell>
-              ))}
-              <TableCell>
-                <BikouCell
-                  tenancyId={r.tenancy_id}
-                  value={r.bikou ?? ''}
-                  updateBikou={updateBikou}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
+                <TableCell>
+                  <FileModal
+                    tenancyId={r.tenancy_id}
+                    roomId={roomId}
+                    bukkenId={bukkenId}
+                    tenantName={r.tenant_name}
+                    files={files}
+                  />
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </div>
-  )
-}
-
-// 備考のインライン編集セル
-function BikouCell({
-  tenancyId,
-  value,
-  updateBikou,
-}: {
-  tenancyId: string
-  value: string
-  updateBikou: (tenancyId: string, formData: FormData) => void
-}) {
-  const [editing, setEditing] = useState(false)
-
-  if (!editing) {
-    return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm">{value || '—'}</span>
-        <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>編集</Button>
-      </div>
-    )
-  }
-
-  return (
-    <form action={updateBikou.bind(null, tenancyId)} className="flex items-center gap-2">
-      <Input name="bikou" defaultValue={value} className="h-8" />
-      <Button type="submit" size="sm">保存</Button>
-      <Button type="button" variant="ghost" size="sm" onClick={() => setEditing(false)}>取消</Button>
-    </form>
   )
 }

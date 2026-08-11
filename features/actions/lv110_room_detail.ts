@@ -162,3 +162,56 @@ export async function updateTenancyBikou(
 
   revalidatePath(`/bukken/rental/${bukkenId}/rooms/${roomId}`)
 }
+
+export async function updateTenancyInfo(
+  tenancyId: string,
+  roomId: string,
+  bukkenId: string,
+  formData: FormData
+) {
+  const account = await getMyAccount()
+  if (!account) redirect('/login')
+
+  const supabase = await createClient()
+
+  const moveOutDate = formData.get('move_out_date') as string
+
+  const { error } = await supabase
+    .from('t250_rent_room_tenancy')
+    .update({
+      tenant_name: formData.get('tenant_name') as string,
+      move_in_date: formData.get('move_in_date') as string,
+      move_out_date: moveOutDate || null,   // 空なら入居中(null)
+      bikou: (formData.get('bikou') as string) || null,
+      update_account: account.name,
+    })
+    .eq('tenancy_id', tenancyId)
+  if (error) throw error
+
+  revalidatePath(`/bukken/rental/${bukkenId}/rooms/${roomId}`)
+}
+
+export async function updatePrepStepDate(
+  prepId: string,
+  roomId: string,
+  bukkenId: string,
+  formData: FormData
+) {
+  const account = await getMyAccount()
+  if (!account) redirect('/login')
+
+  const supabase = await createClient()
+
+  const endDate = formData.get('end_date') as string
+
+  const { error } = await supabase
+    .from('t260_rent_room_prep')       // 工程テーブル(実際のテーブル名に合わせてください)
+    .update({
+      end_date: endDate || null,
+      update_account: account.name,
+    })
+    .eq('prep_id', prepId)
+  if (error) throw error
+
+  revalidatePath(`/bukken/rental/${bukkenId}/rooms/${roomId}`)
+}

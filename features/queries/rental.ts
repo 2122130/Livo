@@ -172,16 +172,16 @@ export async function getTenancyWithPrep(roomId: string) {
   // この部屋の準備セット + 工程(tenancy_idで入居履歴に紐づく)
   const { data: sets } = await supabase
     .from('t270_rent_room_prep_set')
-    .select('prep_set_id, tenancy_id, t260_rent_room_prep(process_code, status_kbn, end_date, sort_order)')
+    .select('prep_set_id, tenancy_id, t260_rent_room_prep(prep_id, process_code, status_kbn, end_date, sort_order)')
     .eq('room_id', roomId)
     .eq('mukou_kbn', 0)
 
   // tenancy_id → 工程配列 のマップを作る
-  const prepByTenancy = new Map<string, { process_code: number; status_kbn: number; end_date: string | null }[]>()
+  const prepByTenancy = new Map<string, { prep_id: string; process_code: number; status_kbn: number; end_date: string | null }[]>()
   for (const s of sets ?? []) {
     if (!s.tenancy_id) continue
     const steps = (s.t260_rent_room_prep as unknown as {
-      process_code: number; status_kbn: number; end_date: string | null; sort_order: number
+      prep_id: string; process_code: number; status_kbn: number; end_date: string | null; sort_order: number
     }[]) ?? []
     prepByTenancy.set(s.tenancy_id, steps)
   }
