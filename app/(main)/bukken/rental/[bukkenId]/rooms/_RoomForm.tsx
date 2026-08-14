@@ -8,6 +8,7 @@ import { EnterToNextForm } from '@/components/common/EnterToNextForm'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import { useActionState } from 'react'
 import type { FormState } from '@/features/actions/lv111_room_new'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type RoomFormValues = {
   room_number?: string
@@ -80,7 +81,7 @@ export function RoomForm({
 
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">
-          <Link href={backHref}>キャンセル</Link>
+          <LoadingLink href={backHref}>キャンセル</LoadingLink>
         </Button>
         <SubmitButton>{submitLabel}</SubmitButton>
       </div>

@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import type { FormState } from '@/features/actions/lv201_sale_new'
 import { useState, useActionState } from 'react'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type SaleFormValues = {
   bukken_category?: number
@@ -180,7 +181,7 @@ export function SaleForm({
       {/* ボタン */}
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">
-          <Link href={backHref}>キャンセル</Link>
+          <LoadingLink href={backHref}>キャンセル</LoadingLink>
         </Button>
         <SubmitButton>{submitLabel}</SubmitButton>
       </div>

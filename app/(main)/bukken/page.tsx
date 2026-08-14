@@ -13,6 +13,7 @@ import { ROLE } from '@/constants/kbn'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 export default async function BukkenPage({
   searchParams,
@@ -61,26 +62,26 @@ export default async function BukkenPage({
         <TabsList className="bg-slate-100 p-1">
           {hasRental && (
             <TabsTrigger value="rental" asChild>
-              <Link href="/bukken?tab=rental"
+              <LoadingLink href="/bukken?tab=rental"
                 className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
                 賃貸
-              </Link>
+              </LoadingLink>
             </TabsTrigger>
           )}
           {hasSale && (
             <TabsTrigger value="sale" asChild>
-              <Link href="/bukken?tab=sale"
+              <LoadingLink href="/bukken?tab=sale"
                 className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
                 売買
-              </Link>
+              </LoadingLink>
             </TabsTrigger>
           )}
           {hasSolar && (
             <TabsTrigger value="solar" asChild>
-              <Link href="/bukken?tab=solar"
+              <LoadingLink href="/bukken?tab=solar"
                 className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">
                 太陽光
-              </Link>
+              </LoadingLink>
             </TabsTrigger>
           )}
         </TabsList>
@@ -89,7 +90,7 @@ export default async function BukkenPage({
           <TabsContent value="rental" className="space-y-3">
             <div className="flex justify-end">
               <Button asChild size="sm">
-                <Link href="/bukken/rental/new">＋ 賃貸物件を登録</Link>
+                <LoadingLink href="/bukken/rental/new">＋ 物件を登録</LoadingLink>
               </Button>
             </div>
             <RentalTable rows={rentalList} />
@@ -100,7 +101,7 @@ export default async function BukkenPage({
           <TabsContent value="sale" className="space-y-3">
             <div className="flex justify-end">
               <Button asChild size="sm">
-                <Link href="/bukken/sale/new">＋ 売買物件を登録</Link>
+                <LoadingLink href="/bukken/sale/new">＋ 物件を登録</LoadingLink>
               </Button>
             </div>
             <SaleList rows={saleList} />

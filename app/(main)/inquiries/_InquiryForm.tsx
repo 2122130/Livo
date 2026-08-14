@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import { useActionState } from 'react'
 import type { FormState } from '@/features/actions/lv801_inquiry_new'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type Option = { bukken_id: string; label: string }
 type Room = { room_id: string; bukken_id: string; room_number: string }
@@ -212,7 +213,7 @@ export function InquiryForm({
 
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">
-          <Link href={backHref}>キャンセル</Link>
+          <LoadingLink href={backHref}>キャンセル</LoadingLink>
         </Button>
         <SubmitButton>{submitLabel}</SubmitButton>
       </div>

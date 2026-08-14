@@ -3,6 +3,7 @@ import { getTaiouCounts } from '@/features/queries/inquiries'
 import { SCREEN } from '@/constants/screens'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import Link from 'next/link'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 export default async function MainMenuPage() {
   const counts = await getTaiouCounts()
@@ -26,7 +27,7 @@ export default async function MainMenuPage() {
           const urgentClass = isInquiry && hasUrgent ? 'panel-urgent' : ''
 
           return (
-            <Link key={item.screenId} href={item.href} className={`menu-panel ${item.panelClass} ${urgentClass}`}>
+            <LoadingLink key={item.screenId} href={item.href} className={`menu-panel ${item.panelClass} ${urgentClass}`}>
               <div className="min-w-0">
                 <span className="panel-title">{item.label}</span>
                 <span className="panel-desc">{item.description}</span>
@@ -48,7 +49,7 @@ export default async function MainMenuPage() {
               <div className="panel-icon-wrapper">
                 <Icon className="h-6 w-6 sm:h-7 sm:w-7" />
               </div>
-            </Link>
+            </LoadingLink>
           )
         })}
       </div>

@@ -5,6 +5,7 @@ import { logout } from '@/features/actions/auth'
 import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
 import { ROLE_LABEL } from '@/constants/kbn'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 export default async function MainLayout({
   children,
@@ -24,10 +25,10 @@ export default async function MainLayout({
     <div className="min-h-screen bg-muted/40">
       <header className="bg-emerald-700 text-white shadow-sm print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-wide hover:opacity-80">
+          <LoadingLink href="/" className="flex items-center gap-2 text-xl font-bold tracking-wide hover:opacity-80">
             <img src="/logos/Livo_logo丸.png" alt="Livo" className="h-8 w-8 object-contain" />
             Livo
-          </Link>
+          </LoadingLink>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               {/* 権限バッジ */}

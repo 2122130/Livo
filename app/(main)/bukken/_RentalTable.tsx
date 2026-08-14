@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type Row = {
   bukken_id: string
@@ -135,9 +136,9 @@ export function RentalTable({ rows }: { rows: Row[] }) {
             {sorted.map((b) => (
               <TableRow key={b.bukken_id}>
                 <TableCell className="p-0">
-                  <Link href={`/bukken/rental/${b.bukken_id}/rooms`} className="block px-4 py-3 font-medium hover:underline">
+                  <LoadingLink href={`/bukken/rental/${b.bukken_id}/rooms`} className="block px-4 py-3 font-medium hover:underline">
                     {b.bukken_name}
-                  </Link>
+                  </LoadingLink >
                 </TableCell>
                 <TableCell>{BUKKEN_CATEGORY_LABEL[b.bukken_category]}</TableCell>
                 <TableCell>{MANAGEMENT_TYPE_LABEL[b.management_type]}</TableCell>
@@ -145,7 +146,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
                 <TableCell>{b.address ?? '—'}</TableCell>
                 <TableCell className="text-center">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/bukken/rental/${b.bukken_id}/edit`}>編集</Link>
+                    <LoadingLink href={`/bukken/rental/${b.bukken_id}/edit`}>編集</LoadingLink>
                   </Button>
                 </TableCell>
               </TableRow>
@@ -167,7 +168,7 @@ export function RentalTable({ rows }: { rows: Row[] }) {
             className="relative rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all active:scale-[0.99] hover:border-emerald-300 hover:shadow-md"
           >
             {/* カード全体をタップ可能にする透明リンク(修正ボタンの下に敷く) */}
-            <Link
+            <LoadingLink
               href={`/bukken/rental/${b.bukken_id}/rooms`}
               className="absolute inset-0 z-0 rounded-xl"
               aria-label={`${b.bukken_name} の部屋一覧へ`}
@@ -208,10 +209,10 @@ export function RentalTable({ rows }: { rows: Row[] }) {
             {/* 修正ボタン(カードリンクより前面。独立して遷移) */}
             <div className="relative z-10 mt-3 flex justify-end">
               <Button asChild variant="outline" size="sm" className="pointer-events-auto">
-                <Link href={`/bukken/rental/${b.bukken_id}/edit`}>
+                <LoadingLink href={`/bukken/rental/${b.bukken_id}/edit`}>
                   <Pencil className="mr-1 h-3.5 w-3.5" />
                   修正
-                </Link>
+                </LoadingLink>
               </Button>
             </div>
           </div>

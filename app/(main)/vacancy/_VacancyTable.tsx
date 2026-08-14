@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Printer } from 'lucide-react'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type Row = {
   room_id: string
@@ -132,12 +133,12 @@ export function VacancyTable({ rows }: { rows: Row[] }) {
               <TableRow key={r.room_id}>
                 <TableCell>{r.bukken_name}</TableCell>
                 <TableCell className="p-0">
-                  <Link
+                  <LoadingLink
                     href={`/bukken/rental/${r.bukken_id}/rooms/${r.room_id}?from=vacancy`}
                     className="block px-4 py-3 font-medium hover:underline"
                   >
                     {r.room_number}
-                  </Link>
+                  </LoadingLink>
                 </TableCell>
                 <TableCell>{r.layout ?? '—'}</TableCell>
                 <TableCell>{r.rent != null ? `${r.rent.toLocaleString()}円` : '—'}</TableCell>

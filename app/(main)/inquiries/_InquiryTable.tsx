@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type Row = {
   taiou_id: string
@@ -171,13 +172,13 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
               <TableRow key={r.taiou_id}>
                 <TableCell>{statusBadge(r.status_kbn)}</TableCell>
                 <TableCell className="p-0 whitespace-nowrap">
-                  <Link href={`/inquiries/${r.taiou_id}/edit`}
+                  <LoadingLink href={`/inquiries/${r.taiou_id}/edit`}
                     className="block px-4 py-3 font-medium hover:underline">
                     {formatDate(r.uketsuke_date)}
                     <span className="ml-2 text-xs font-normal text-muted-foreground">
                       {daysElapsed(r.uketsuke_date)}日経過
                     </span>
-                  </Link>
+                  </LoadingLink>
                 </TableCell>
                 <TableCell>{r.uketsuke_name}</TableCell>
                 <TableCell>
@@ -212,7 +213,7 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
             className="relative rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all active:scale-[0.99] hover:border-emerald-300 hover:shadow-md"
           >
             {/* カード全体タップで編集へ */}
-            <Link
+            <LoadingLink
               href={`/inquiries/${r.taiou_id}/edit`}
               className="absolute inset-0 z-0 rounded-xl"
               aria-label="対応履歴を編集"
@@ -258,10 +259,10 @@ export function InquiryTable({ rows }: { rows: Row[] }) {
                 )}
               </div>
               <Button asChild variant="outline" size="sm" className="pointer-events-auto">
-                <Link href={`/inquiries/${r.taiou_id}/edit`}>
+                <LoadingLink href={`/inquiries/${r.taiou_id}/edit`}>
                   <Pencil className="mr-1 h-3.5 w-3.5" />
                   修正
-                </Link>
+                </LoadingLink>
               </Button>
             </div>
           </div>

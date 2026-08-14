@@ -10,6 +10,7 @@ import { PageHeader } from '@/components/common/PageHeader'
 import { getEnabledFeatures } from '@/features/features-flag/api'
 import { getMyAccount } from '@/features/auth/get-my-account'
 import { ROLE } from '@/constants/kbn'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 export default async function InquiriesPage({
   searchParams,
@@ -49,20 +50,21 @@ export default async function InquiriesPage({
         <TabsList className="bg-slate-100 p-1">
           {hasRental && (
             <TabsTrigger value="rental" asChild>
-              <Link href="/inquiries?tab=rental"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">賃貸</Link>
+              <LoadingLink href="/inquiries?tab=rental"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">賃貸</LoadingLink
+                >
             </TabsTrigger>
           )}
           {hasSale && (
             <TabsTrigger value="sale" asChild>
-              <Link href="/inquiries?tab=sale"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">売買</Link>
+              <LoadingLink href="/inquiries?tab=sale"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">売買</LoadingLink>
             </TabsTrigger>
           )}
           {hasSolar && (
             <TabsTrigger value="solar" asChild>
-              <Link href="/inquiries?tab=solar"
-                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">太陽光</Link>
+              <LoadingLink href="/inquiries?tab=solar"
+                className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm font-medium px-6">太陽光</LoadingLink>
             </TabsTrigger>
           )}
         </TabsList>
@@ -70,7 +72,7 @@ export default async function InquiriesPage({
         {hasRental && (
           <TabsContent value="rental" className="space-y-3">
             <div className="flex justify-end">
-              <Button asChild size="sm"><Link href="/inquiries/new?kbn=1">＋ 対応履歴を登録(賃貸)</Link></Button>
+              <Button asChild size="sm"><LoadingLink href="/inquiries/new?kbn=1">＋ 対応履歴を登録(賃貸)</LoadingLink></Button>
             </div>
             <InquiryTable rows={rentalRows} />
           </TabsContent>
@@ -79,7 +81,7 @@ export default async function InquiriesPage({
         {hasSale && (
           <TabsContent value="sale" className="space-y-3">
             <div className="flex justify-end">
-              <Button asChild size="sm"><Link href="/inquiries/new?kbn=2">＋ 対応履歴を登録(売買)</Link></Button>
+              <Button asChild size="sm"><LoadingLink href="/inquiries/new?kbn=2">＋ 対応履歴を登録(売買)</LoadingLink></Button>
             </div>
             <InquiryTable rows={saleRows} />
           </TabsContent>
@@ -88,7 +90,7 @@ export default async function InquiriesPage({
         {hasSolar && (
           <TabsContent value="solar" className="space-y-3">
             <div className="flex justify-end">
-              <Button asChild size="sm"><Link href="/inquiries/new?kbn=3">＋ 対応履歴を登録(太陽光)</Link></Button>
+              <Button asChild size="sm"><LoadingLink href="/inquiries/new?kbn=3">＋ 対応履歴を登録(太陽光)</LoadingLink></Button>
             </div>
             <InquiryTable rows={solarRows} />
           </TabsContent>

@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/table'
 import { MANAGEMENT_TYPE_LABEL, TRANSACTION_TYPE_LABEL } from '@/constants/kbn'
 import { LAND_STATUS_LABEL } from '@/constants/kbn'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type Row = {
   bukken_id: string
@@ -220,12 +221,12 @@ function CategoryTable({
           {sorted.map((r) => (
             <TableRow key={r.bukken_id}>
               <TableCell className="p-0">
-                <Link href={`/bukken/sale/${r.bukken_id}`}
+                <LoadingLink href={`/bukken/sale/${r.bukken_id}`}
                   className="block px-4 py-3 font-medium hover:underline">
                   {hasBuildingName
                     ? (r.bukken_name ?? '(名称未設定)')
                     : (r.address ?? '(所在地未設定)')}
-                </Link>
+                </LoadingLink>
               </TableCell>
               <TableCell>
                 {r.trade_status != null ? (

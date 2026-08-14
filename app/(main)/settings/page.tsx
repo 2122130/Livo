@@ -9,6 +9,7 @@ import { ROLE, ROLE_LABEL } from '@/constants/kbn'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 export default async function SettingsPage({
   searchParams,
@@ -87,12 +88,12 @@ export default async function SettingsPage({
           <CardHeader><CardTitle className="text-base">管理者メニュー</CardTitle></CardHeader>
           <CardContent className="space-y-2">
             <Button asChild variant="outline" className="w-full justify-start">
-              <Link href="/settings/accounts">アカウント管理</Link>
+              <LoadingLink href="/settings/accounts">アカウント管理</LoadingLink>
             </Button>
             {/* アクセスログはシステム管理者のみ */}
             {isSystem && (
               <Button asChild variant="outline" className="w-full justify-start">
-                <Link href="/settings/logs">アクセスログ</Link>
+                <LoadingLink href="/settings/logs">アクセスログ</LoadingLink>
               </Button>
             )}
           </CardContent>

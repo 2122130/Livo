@@ -2,30 +2,32 @@
 
 import { useFormStatus } from 'react-dom'
 import { Button } from '@/components/ui/button'
+import { ReactNode } from 'react'
 
 export function SubmitButton({
   children,
   className,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }) {
   const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" disabled={pending} className={className}>
-      {pending ? (
-        <span className="flex items-center gap-2">
-          <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-          </svg>
-          処理中...
-        </span>
-      ) : (
-        children
+    <>
+      <Button type="submit" disabled={pending} className={className}>
+        {pending ? '処理中...' : children}
+      </Button>
+
+      {/* 送信中は画面中央にオーバーレイ */}
+      {pending && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3 rounded-2xl bg-white/70 px-8 py-6 shadow-lg backdrop-blur-md">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+            <p className="text-sm font-medium text-slate-700">Loading...</p>
+          </div>
+        </div>
       )}
-    </Button>
+    </>
   )
 }

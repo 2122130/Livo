@@ -6,6 +6,7 @@ import { BackLink } from '@/components/common/BackLink'
 import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 export default async function RoomsPage({
   params,
@@ -28,7 +29,7 @@ export default async function RoomsPage({
             backLabel="物件一覧へ"
             action={
               <Button asChild size="sm">
-                <Link href={`/bukken/rental/${bukkenId}/rooms/new`}>＋ 部屋を登録</Link>
+                <LoadingLink href={`/bukken/rental/${bukkenId}/rooms/new`}>＋ 部屋を登録</LoadingLink>
               </Button>
             }
           />

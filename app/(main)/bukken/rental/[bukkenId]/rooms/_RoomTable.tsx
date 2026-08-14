@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { LoadingLink } from '@/components/common/LoadingLink'
 
 type Row = {
   room_id: string
@@ -80,9 +81,9 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
             {sorted.map((r) => (
               <TableRow key={r.room_id}>
                 <TableCell className="p-0">
-                  <Link href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}`} className="block px-4 py-3 font-medium hover:underline">
+                  <LoadingLink href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}`} className="block px-4 py-3 font-medium hover:underline">
                     {r.room_number}
-                  </Link>
+                  </LoadingLink>
                 </TableCell>
                 <TableCell>{statusBadge(r.room_status)}</TableCell>
                 <TableCell>{r.layout ?? '—'}</TableCell>
@@ -92,7 +93,7 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
                 <TableCell>{r.guarantee_company ?? '—'}</TableCell>
                 <TableCell className="text-center">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}/edit`}>編集</Link>
+                    <LoadingLink href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}/edit`}>編集</LoadingLink>
                   </Button>
                 </TableCell>
               </TableRow>
@@ -114,7 +115,7 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
             className="relative rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all active:scale-[0.99] hover:border-emerald-300 hover:shadow-md"
           >
             {/* カード全体タップで部屋詳細へ */}
-            <Link
+            <LoadingLink
               href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}`}
               className="absolute inset-0 z-0 rounded-xl"
               aria-label={`部屋 ${r.room_number} の詳細へ`}
@@ -143,10 +144,10 @@ export function RoomTable({ rows, bukkenId }: { rows: Row[]; bukkenId: string })
             {/* 修正ボタン */}
             <div className="relative z-10 mt-3 flex justify-end">
               <Button asChild variant="outline" size="sm" className="pointer-events-auto">
-                <Link href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}/edit`}>
+                <LoadingLink href={`/bukken/rental/${bukkenId}/rooms/${r.room_id}/edit`}>
                   <Pencil className="mr-1 h-3.5 w-3.5" />
                   修正
-                </Link>
+                </LoadingLink>
               </Button>
             </div>
           </div>
