@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import { useActionState } from 'react'
-import { OcrButton } from '@/components/common/OcrButton'
 import { CustomFieldInputs } from '@/components/common/CustomFieldInputs'
 import type { CustomField, CustomValues } from '@/lib/custom-fields'
 import type { FormState } from '@/features/actions/lv101_rental_new'
@@ -46,7 +45,6 @@ export function BukkenForm({
         </div>
       )}
 
-      <OcrButton />
 
       <div className="space-y-2">
         <Label htmlFor="bukken_name">物件名 *</Label>

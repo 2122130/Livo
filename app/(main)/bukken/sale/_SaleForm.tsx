@@ -13,7 +13,6 @@ import { SubmitButton } from '@/components/common/SubmitButton'
 import type { FormState } from '@/features/actions/lv201_sale_new'
 import { useState, useActionState } from 'react'
 import { LoadingLink } from '@/components/common/LoadingLink'
-import { OcrButton } from '@/components/common/OcrButton'
 import { CustomFieldInputs } from '@/components/common/CustomFieldInputs'
 import type { CustomField, CustomValues } from '@/lib/custom-fields'
 
@@ -74,7 +73,6 @@ export function SaleForm({
         </div>
       )}
 
-      <OcrButton />
 
       {/* 種別 */}
       <div className="space-y-1">
