@@ -19,7 +19,7 @@ import { MoveInModal } from './_MoveInModal'
 import { MoveOutModal } from './_MoveOutModal'
 import { PrepModal } from './_PrepModal'
 import Link from 'next/link'
-import { FileText } from 'lucide-react'
+import { FileText, FileSignature } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getCustomFields } from '@/features/queries/custom-fields'
 import { getChangeHistory } from '@/features/queries/history'
@@ -79,9 +79,14 @@ export default async function RoomDetailPage({
       <div>
         <PageHeader title={`${room.bukken_name} - ${room.room_number}`} backHref={`/bukken/rental/${bukkenId}/rooms`} backLabel="部屋一覧へ"
           action={
-            <Button asChild variant="outline" size="sm">
-              <Link href={`/documents/room/${roomId}`}><FileText className="mr-1 h-4 w-4" />書類を作成</Link>
-            </Button>
+            <>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/documents/room/${roomId}`}><FileText className="mr-1 h-4 w-4" />物件概要書</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/documents/contract/${roomId}`}><FileSignature className="mr-1 h-4 w-4" />契約書(頭書)</Link>
+              </Button>
+            </>
           } />
         {/* <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
           <BackLink href={backLink.href} label={backLink.label} />
