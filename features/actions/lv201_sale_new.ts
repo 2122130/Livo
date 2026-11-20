@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { getMyAccount } from '@/features/auth/get-my-account'
+import { buildCustomValues } from '@/features/queries/custom-fields'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 // 種別コード → 詳細テーブル名
@@ -41,6 +42,7 @@ export async function createSaleBukken(
       price: toNum(formData.get('price')),
       address: (formData.get('address') as string) || null,
       transaction_type: toNum(formData.get('transaction_type')),
+      custom_fields: await buildCustomValues('sale', formData),
       create_account: account.name,
     })
     .select('bukken_id')
@@ -114,6 +116,7 @@ export async function updateSaleBukken(
       price: toNum(formData.get('price')),
       address: (formData.get('address') as string) || null,
       transaction_type: toNum(formData.get('transaction_type')),
+      custom_fields: await buildCustomValues('sale', formData, { table: 'm300_sale_bukken', pk: 'bukken_id', id: bukkenId }),
       update_account: account.name,
     })
     .eq('bukken_id', bukkenId)

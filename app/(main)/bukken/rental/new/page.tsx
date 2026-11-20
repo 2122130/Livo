@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getCustomFields } from '@/features/queries/custom-fields'
 import { createRentalBukken } from '@/features/actions/lv101_rental_new'
 import { BukkenForm } from '../_BukkenForm'
 import { Button } from '@/components/ui/button'
@@ -7,7 +8,8 @@ import { AccessLogger } from '@/components/common/AccessLogger'
 import { SCREEN } from '@/constants/screens'
 import { PageHeader } from '@/components/common/PageHeader'
 
-export default function RentalNewPage() {
+export default async function RentalNewPage() {
+  const customFields = await getCustomFields('rental')
   return (
     <div className="mx-auto max-w-xl space-y-4">
       <AccessLogger screenId={SCREEN.RENTAL_NEW} />
@@ -21,6 +23,7 @@ export default function RentalNewPage() {
             action={createRentalBukken}
             backHref="/bukken?tab=rental"
             submitLabel="登録する"
+            customFields={customFields}
           />
         </CardContent>
       </Card>

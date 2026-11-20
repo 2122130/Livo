@@ -18,6 +18,14 @@ import { getTenancyFilesMap } from '@/features/queries/tenancy-file'
 import { MoveInModal } from './_MoveInModal'
 import { MoveOutModal } from './_MoveOutModal'
 import { PrepModal } from './_PrepModal'
+import Link from 'next/link'
+import { FileText } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { getCustomFields } from '@/features/queries/custom-fields'
+import { getChangeHistory } from '@/features/queries/history'
+import { ChangeHistory } from '@/components/common/ChangeHistory'
+import { CustomFieldRows } from '@/components/common/CustomFieldRows'
+import type { CustomValues } from '@/lib/custom-fields'
 
 export default async function RoomDetailPage({
   params,
@@ -56,12 +64,25 @@ export default async function RoomDetailPage({
   const tenancyIds = tenancyRows.map((t) => t.tenancy_id)
   const filesMap = await getTenancyFilesMap(tenancyIds)
 
+  // 追加項目・変更履歴
+  const [customFields, history] = await Promise.all([
+    getCustomFields('room'),
+    getChangeHistory([roomId, ...tenancyIds], ['m210_rent_room', 't250_rent_room_tenancy']),
+  ])
+  const customValues = (room.custom_fields ?? {}) as CustomValues
+  const hasCustom = customFields.some((f) => customValues[f.field_id] != null && customValues[f.field_id] !== '')
+
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <AccessLogger screenId={SCREEN.ROOM_DETAIL} />
       {/* ヘッダー */}
       <div>
-        <PageHeader title={`${room.bukken_name} - ${room.room_number}`} backHref={`/bukken/rental/${bukkenId}/rooms`} backLabel="部屋一覧へ" />
+        <PageHeader title={`${room.bukken_name} - ${room.room_number}`} backHref={`/bukken/rental/${bukkenId}/rooms`} backLabel="部屋一覧へ"
+          action={
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/documents/room/${roomId}`}><FileText className="mr-1 h-4 w-4" />書類を作成</Link>
+            </Button>
+          } />
         {/* <Button asChild variant="link" className="h-auto p-0 text-muted-foreground">
           <BackLink href={backLink.href} label={backLink.label} />
         </Button> */}
@@ -127,6 +148,15 @@ export default async function RoomDetailPage({
       
       
 
+      {hasCustom && (
+        <Card>
+          <CardHeader><CardTitle className="text-base">追加項目</CardTitle></CardHeader>
+          <CardContent className="py-0">
+            <CustomFieldRows fields={customFields} values={customValues} />
+          </CardContent>
+        </Card>
+      )}
+
       {/* 入居・準備履歴(統合) */}
       <Card>
         <CardHeader><CardTitle className="text-base">入居・準備履歴</CardTitle></CardHeader>
@@ -140,6 +170,8 @@ export default async function RoomDetailPage({
           />
         </CardContent>
       </Card>
+
+      <ChangeHistory rows={history} customFields={customFields} />
     </div>
   )
 }

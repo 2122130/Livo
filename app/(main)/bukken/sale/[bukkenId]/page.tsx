@@ -1,4 +1,10 @@
 import Link from 'next/link'
+import { getCustomFields } from '@/features/queries/custom-fields'
+import { getChangeHistory } from '@/features/queries/history'
+import { ChangeHistory } from '@/components/common/ChangeHistory'
+import { CustomFieldRows } from '@/components/common/CustomFieldRows'
+import { FileText } from 'lucide-react'
+import type { CustomValues } from '@/lib/custom-fields'
 import { getSaleBukkenDetail } from '@/features/queries/sale'
 import {
   BUKKEN_CATEGORY_LABEL, TRADE_STATUS_LABEL,
@@ -48,7 +54,14 @@ export default async function SaleDetailPage({
   params: Promise<{ bukkenId: string }>
 }) {
   const { bukkenId } = await params
-  const b = await getSaleBukkenDetail(bukkenId)
+  const [b, customFields, history] = await Promise.all([
+    getSaleBukkenDetail(bukkenId),
+    getCustomFields('sale'),
+    getChangeHistory(bukkenId, [
+      'm300_sale_bukken', 'm301_sale_bukken_mansion', 'm302_sale_bukken_apartment',
+      'm303_sale_bukken_house', 'm304_sale_bukken_land',
+    ]),
+  ])
 
   const row = (label: string, value: unknown, unit = '') =>
     value != null && value !== '' ? (
@@ -62,7 +75,12 @@ export default async function SaleDetailPage({
     <div className="mx-auto max-w-2xl space-y-4">
       <AccessLogger screenId={SCREEN.SALE_DETAIL} />
       <div>
-        <PageHeader title={b.bukken_name ?? '(名称未設定)'} backHref="/bukken?tab=sale" backLabel="売買一覧へ" />
+        <PageHeader title={b.bukken_name ?? '(名称未設定)'} backHref="/bukken?tab=sale" backLabel="売買一覧へ"
+          action={
+            <Button asChild variant="outline" size="sm">
+              <Link href={`/documents/sale/${bukkenId}`}><FileText className="mr-1 h-4 w-4" />書類を作成</Link>
+            </Button>
+          } />
       </div>
 
       <div className="flex items-center gap-3">
@@ -81,6 +99,7 @@ export default async function SaleDetailPage({
           {row('管理区分', MANAGEMENT_TYPE_LABEL[b.management_type])}
           {row('取引態様', b.transaction_type != null ? TRANSACTION_TYPE_LABEL[b.transaction_type] : null)}
           {row('所在地', b.address)}
+          <CustomFieldRows fields={customFields} values={b.custom_fields as CustomValues} />
         </CardContent>
       </Card>
 
@@ -90,6 +109,8 @@ export default async function SaleDetailPage({
           <DetailRows category={b.bukken_category} detail={b.detail} />
         </CardContent>
       </Card>
+
+      <ChangeHistory rows={history} customFields={customFields} />
     </div>
   )
 }

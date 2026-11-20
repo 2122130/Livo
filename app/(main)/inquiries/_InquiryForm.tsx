@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import { useActionState } from 'react'
+import { OcrButton } from '@/components/common/OcrButton'
 import type { FormState } from '@/features/actions/lv801_inquiry_new'
 import { LoadingLink } from '@/components/common/LoadingLink'
 
@@ -57,6 +58,7 @@ export function InquiryForm({
 
   return (
     <EnterToNextForm action={formAction} className="space-y-5">
+      <OcrButton />
       {/* エラーメッセージ */}
       {state.error && (
         <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">

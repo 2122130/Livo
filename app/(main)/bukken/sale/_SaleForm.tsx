@@ -13,6 +13,9 @@ import { SubmitButton } from '@/components/common/SubmitButton'
 import type { FormState } from '@/features/actions/lv201_sale_new'
 import { useState, useActionState } from 'react'
 import { LoadingLink } from '@/components/common/LoadingLink'
+import { OcrButton } from '@/components/common/OcrButton'
+import { CustomFieldInputs } from '@/components/common/CustomFieldInputs'
+import type { CustomField, CustomValues } from '@/lib/custom-fields'
 
 type SaleFormValues = {
   bukken_category?: number
@@ -29,6 +32,7 @@ type SaleFormValues = {
   total_floor_area?: number | null
   land_area?: number | null
   current_status?: number | null
+  custom_fields?: CustomValues | null
 }
 
 function Select({ name, label, options, defaultValue, includeEmpty }: {
@@ -50,13 +54,14 @@ function Select({ name, label, options, defaultValue, includeEmpty }: {
 }
 
 export function SaleForm({
-  action, backHref, values, submitLabel, categoryLocked,
+  action, backHref, values, submitLabel, categoryLocked, customFields,
 }: {
   action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   values?: SaleFormValues
   submitLabel: string
   categoryLocked?: boolean   // 編集時は種別を変えられないようにする用
+  customFields?: CustomField[]
 }) {
   const [category, setCategory] = useState<number>(values?.bukken_category ?? 1)
   const [state, formAction] = useActionState(action, { error: null })
@@ -68,7 +73,9 @@ export function SaleForm({
           {state.error}
         </div>
       )}
-      
+
+      <OcrButton />
+
       {/* 種別 */}
       <div className="space-y-1">
         <Label htmlFor="bukken_category">種別 *</Label>
@@ -179,6 +186,8 @@ export function SaleForm({
       </div>
 
       {/* ボタン */}
+      <CustomFieldInputs fields={customFields} values={values?.custom_fields} />
+
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">
           <LoadingLink href={backHref}>キャンセル</LoadingLink>

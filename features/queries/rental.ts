@@ -31,7 +31,7 @@ export async function getRentalBukken(bukkenId: string) {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('m200_rent_bukken')
-    .select('bukken_id, bukken_name, bukken_category, management_type, address')
+    .select('bukken_id, bukken_name, bukken_category, management_type, address, custom_fields')
     .eq('bukken_id', bukkenId)
     .eq('mukou_kbn', 0)
     .single()
@@ -75,7 +75,7 @@ export async function getRoomDetail(roomId: string) {
 
   const { data: room, error } = await supabase
     .from('m210_rent_room')
-    .select('room_id, bukken_id, room_number, layout, rent, other_fee, parking_number, guarantee_company, m200_rent_bukken(bukken_name)')
+    .select('room_id, bukken_id, room_number, layout, rent, other_fee, parking_number, guarantee_company, custom_fields, m200_rent_bukken(bukken_name)')
     .eq('room_id', roomId)
     .eq('mukou_kbn', 0)
     .single()

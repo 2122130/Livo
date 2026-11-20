@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getCustomFields } from '@/features/queries/custom-fields'
 import { getRoomDetail, getRentalBukken } from '@/features/queries/rental'
 import { updateRoom, deleteRoom } from '@/features/actions/lv111_room_new'
 import { RoomForm } from '../../_RoomForm'
@@ -15,9 +16,10 @@ export default async function RoomEditPage({
   params: Promise<{ bukkenId: string; roomId: string }>
 }) {
   const { bukkenId, roomId } = await params
-  const [bukken, room] = await Promise.all([
+  const [bukken, room, customFields] = await Promise.all([
     getRentalBukken(bukkenId),
     getRoomDetail(roomId),
+    getCustomFields('room'),
   ])
 
   return (
@@ -34,6 +36,7 @@ export default async function RoomEditPage({
             backHref={`/bukken/rental/${bukkenId}/rooms`}
             values={room}
             submitLabel="更新する"
+            customFields={customFields}
           />
           {/* 削除ボタンを更新ボタン行の左端に重ねる */}
           <div className="-mt-[52px] w-fit">

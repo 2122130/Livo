@@ -8,6 +8,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import { useActionState } from 'react'
+import { OcrButton } from '@/components/common/OcrButton'
+import { CustomFieldInputs } from '@/components/common/CustomFieldInputs'
+import type { CustomField, CustomValues } from '@/lib/custom-fields'
 import type { FormState } from '@/features/actions/lv101_rental_new'
 import { LoadingLink } from '@/components/common/LoadingLink'
 
@@ -16,6 +19,7 @@ type BukkenFormValues = {
   bukken_category?: number
   management_type?: number
   address?: string | null
+  custom_fields?: CustomValues | null
 }
 
 export function BukkenForm({
@@ -23,11 +27,13 @@ export function BukkenForm({
   backHref,
   values,
   submitLabel,
+  customFields,
 }: {
   action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   values?: BukkenFormValues
   submitLabel: string
+  customFields?: CustomField[]
 }) {
   const [state, formAction] = useActionState(action, { error: null })
 
@@ -39,7 +45,9 @@ export function BukkenForm({
           {state.error}
         </div>
       )}
-      
+
+      <OcrButton />
+
       <div className="space-y-2">
         <Label htmlFor="bukken_name">物件名 *</Label>
         <Input id="bukken_name" name="bukken_name" required defaultValue={values?.bukken_name ?? ''} />
@@ -71,6 +79,8 @@ export function BukkenForm({
         <Label htmlFor="address">所在地</Label>
         <Input id="address" name="address" defaultValue={values?.address ?? ''} />
       </div>
+
+      <CustomFieldInputs fields={customFields} values={values?.custom_fields} />
 
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">

@@ -51,7 +51,7 @@ export async function getSaleBukkenDetail(bukkenId: string) {
   // 共通項目
   const { data: base, error } = await supabase
     .from('m300_sale_bukken')
-    .select('bukken_id, bukken_category, bukken_name, trade_status, management_type, price, address, transaction_type')
+    .select('bukken_id, bukken_category, bukken_name, trade_status, management_type, price, address, transaction_type, custom_fields')
     .eq('bukken_id', bukkenId)
     .eq('mukou_kbn', 0)
     .single()

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getCustomFields } from '@/features/queries/custom-fields'
 import { getSaleBukkenDetail } from '@/features/queries/sale'
 import { updateSaleBukken, deleteSaleBukken } from '@/features/actions/lv201_sale_new'
 import { SaleForm } from '../../_SaleForm'
@@ -15,7 +16,7 @@ export default async function SaleEditPage({
   params: Promise<{ bukkenId: string }>
 }) {
   const { bukkenId } = await params
-  const b = await getSaleBukkenDetail(bukkenId)
+  const [b, customFields] = await Promise.all([getSaleBukkenDetail(bukkenId), getCustomFields('sale')])
 
   // 共通項目 + 詳細を、_SaleForm の初期値の形にまとめる
   const values = {
@@ -26,6 +27,7 @@ export default async function SaleEditPage({
     price: b.price,
     address: b.address,
     transaction_type: b.transaction_type,
+    custom_fields: b.custom_fields,
     ...b.detail, // floor_plan, exclusive_area など種別詳細
   }
 
@@ -44,6 +46,7 @@ export default async function SaleEditPage({
             values={values}
             submitLabel="更新する"
             categoryLocked
+            customFields={customFields}
           />
           {/* 削除ボタンを更新ボタン行の左端に重ねる */}
           <div className="-mt-[52px] w-fit">

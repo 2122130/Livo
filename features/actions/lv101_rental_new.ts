@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getMyAccount } from '@/features/auth/get-my-account'
+import { buildCustomValues } from '@/features/queries/custom-fields'
 
 export type FormState = { error: string | null }
 
@@ -27,6 +28,7 @@ export async function createRentalBukken(
     bukken_category: Number(formData.get('bukken_category')),
     management_type: Number(formData.get('management_type')),
     address: (formData.get('address') as string) || null,
+    custom_fields: await buildCustomValues('rental', formData),
     create_account: account.name,
   })
   if (error) {
@@ -54,6 +56,7 @@ export async function updateRentalBukken(
       bukken_category: Number(formData.get('bukken_category')),
       management_type: Number(formData.get('management_type')),
       address: (formData.get('address') as string) || null,
+      custom_fields: await buildCustomValues('rental', formData, { table: 'm200_rent_bukken', pk: 'bukken_id', id: bukkenId }),
       update_account: account.name,
     })
     .eq('bukken_id', bukkenId)

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { getCustomFields } from '@/features/queries/custom-fields'
 import { getRentalBukken } from '@/features/queries/rental'
 import { createRoom } from '@/features/actions/lv111_room_new'
 import { RoomForm } from '../_RoomForm'
@@ -14,7 +15,7 @@ export default async function RoomNewPage({
   params: Promise<{ bukkenId: string }>
 }) {
   const { bukkenId } = await params
-  const bukken = await getRentalBukken(bukkenId)
+  const [bukken, customFields] = await Promise.all([getRentalBukken(bukkenId), getCustomFields('room')])
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
@@ -29,6 +30,7 @@ export default async function RoomNewPage({
             action={createRoom.bind(null, bukkenId)}
             backHref={`/bukken/rental/${bukkenId}/rooms`}
             submitLabel="登録する"
+            customFields={customFields}
           />
         </CardContent>
       </Card>

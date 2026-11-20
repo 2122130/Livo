@@ -7,6 +7,9 @@ import { Label } from '@/components/ui/label'
 import { EnterToNextForm } from '@/components/common/EnterToNextForm'
 import { SubmitButton } from '@/components/common/SubmitButton'
 import { useActionState } from 'react'
+import { OcrButton } from '@/components/common/OcrButton'
+import { CustomFieldInputs } from '@/components/common/CustomFieldInputs'
+import type { CustomField, CustomValues } from '@/lib/custom-fields'
 import type { FormState } from '@/features/actions/lv111_room_new'
 import { LoadingLink } from '@/components/common/LoadingLink'
 
@@ -17,6 +20,7 @@ type RoomFormValues = {
   other_fee?: number | null
   parking_number?: string | null
   guarantee_company?: string | null
+  custom_fields?: CustomValues | null
 }
 
 export function RoomForm({
@@ -24,11 +28,13 @@ export function RoomForm({
   backHref,
   values,
   submitLabel,
+  customFields,
 }: {
   action: (prevState: FormState, formData: FormData) => Promise<FormState>
   backHref: string
   values?: RoomFormValues
   submitLabel: string
+  customFields?: CustomField[]
 }) {
   const [state, formAction] = useActionState(action, { error: null })
 
@@ -39,7 +45,9 @@ export function RoomForm({
           {state.error}
         </div>
       )}
-      
+
+      <OcrButton />
+
       <div className="space-y-2">
         <Label htmlFor="room_number">部屋番号 *</Label>
         <Input id="room_number" name="room_number" required
@@ -78,6 +86,8 @@ export function RoomForm({
       </div>
 
       
+
+      <CustomFieldInputs fields={customFields} values={values?.custom_fields} />
 
       <div className="flex justify-end gap-2 pt-2">
         <Button asChild variant="outline" type="button">

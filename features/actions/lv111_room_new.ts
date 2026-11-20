@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { getMyAccount } from '@/features/auth/get-my-account'
+import { buildCustomValues } from '@/features/queries/custom-fields'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export type FormState = { error: string | null }
@@ -32,6 +33,7 @@ export async function createRoom(
     other_fee: toNum(formData.get('other_fee')),
     parking_number: (formData.get('parking_number') as string) || null,
     guarantee_company: (formData.get('guarantee_company') as string) || null,
+    custom_fields: await buildCustomValues('room', formData),
     create_account: account.name,
   })
   if (error) return { error: '登録に失敗しました。時間をおいて再度お試しください。' }
@@ -63,6 +65,7 @@ export async function updateRoom(
       other_fee: toNum(formData.get('other_fee')),
       parking_number: (formData.get('parking_number') as string) || null,
       guarantee_company: (formData.get('guarantee_company') as string) || null,
+      custom_fields: await buildCustomValues('room', formData, { table: 'm210_rent_room', pk: 'room_id', id: roomId }),
       update_account: account.name,
     })
     .eq('room_id', roomId)

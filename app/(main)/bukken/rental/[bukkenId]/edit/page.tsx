@@ -1,4 +1,7 @@
 import Link from 'next/link'
+import { getCustomFields } from '@/features/queries/custom-fields'
+import { getChangeHistory } from '@/features/queries/history'
+import { ChangeHistory } from '@/components/common/ChangeHistory'
 import { getRentalBukken } from '@/features/queries/rental'
 import { updateRentalBukken, deleteRentalBukken } from '@/features/actions/lv101_rental_new'
 import { BukkenForm } from '../../_BukkenForm'
@@ -13,7 +16,11 @@ export default async function RentalEditPage({
   params: Promise<{ bukkenId: string }>
 }) {
   const { bukkenId } = await params
-  const bukken = await getRentalBukken(bukkenId)
+  const [bukken, customFields, history] = await Promise.all([
+    getRentalBukken(bukkenId),
+    getCustomFields('rental'),
+    getChangeHistory(bukkenId, ['m200_rent_bukken']),
+  ])
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
@@ -28,6 +35,7 @@ export default async function RentalEditPage({
             backHref="/bukken?tab=rental"
             values={bukken}
             submitLabel="更新する"
+            customFields={customFields}
           />
           {/* 削除ボタンを更新ボタン行の左端に重ねる */}
           <div className="-mt-[52px] w-fit">
@@ -35,6 +43,7 @@ export default async function RentalEditPage({
           </div>
         </CardContent>
       </Card>
+      <ChangeHistory rows={history} customFields={customFields} />
     </div>
   )
 }

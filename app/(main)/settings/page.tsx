@@ -90,6 +90,9 @@ export default async function SettingsPage({
             <Button asChild variant="outline" className="w-full justify-start">
               <LoadingLink href="/settings/accounts">アカウント管理</LoadingLink>
             </Button>
+            <Button asChild variant="outline" className="w-full justify-start">
+              <Link href="/settings/fields">項目の追加(物件・部屋に自社の項目を足す)</Link>
+            </Button>
             {/* アクセスログはシステム管理者のみ */}
             {isSystem && (
               <Button asChild variant="outline" className="w-full justify-start">
