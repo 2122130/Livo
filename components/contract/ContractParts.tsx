@@ -13,11 +13,12 @@ export function E({
   const empty = v === null || v === undefined || v === ''
   return (
     <span
+      data-e=""
       contentEditable
       suppressContentEditableWarning
       style={{ minWidth: minW }}
-      className={`inline-block min-h-[1.4em] rounded-sm px-0.5 align-middle outline-none focus:bg-sky-50 ${
-        empty ? 'bg-amber-50 print:bg-transparent' : ''
+      className={`inline-block min-h-[1.4em] rounded-sm px-0.5 align-middle outline-none focus:bg-sky-50 print:bg-transparent ${
+        empty ? 'bg-amber-50' : ''
       } ${className}`}
     >
       {empty ? '' : v}

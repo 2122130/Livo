@@ -66,3 +66,21 @@ export const yen = (v: number | string | null | undefined): string | null => {
   const n = typeof v === 'number' ? v : Number(String(v).replace(/[,円]/g, ''))
   return Number.isFinite(n) ? `${n.toLocaleString()}円` : String(v)
 }
+
+// 書きかけの契約書(保存してあれば)
+export async function getContractDraft(roomId: string, tenancyKey: string, sheetType: 'house' | 'store') {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('t600_contract_draft')
+    .select('values, layout_version, update_date, update_account')
+    .eq('room_id', roomId)
+    .eq('tenancy_key', tenancyKey)
+    .eq('sheet_type', sheetType)
+    .maybeSingle()
+  return data as
+    | { values: { e: string[]; c: boolean[] }; layout_version: string; update_date: string; update_account: string | null }
+    | null
+}
+
+// 用紙の形を変えたら上げる(古い保存内容を間違った欄に戻さないため)
+export const CONTRACT_LAYOUT_VERSION = { house: 'house-v1', store: 'store-v1' } as const
